@@ -100,20 +100,6 @@ const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
     return null;
   }
 
-  const addImage = () => {
-    const url = window.prompt('이미지 URL을 입력하세요:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
-
-  const setLink = () => {
-    const url = window.prompt('링크 URL을 입력하세요:');
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
-    }
-  };
-
   return (
     <div className={styles.editorContainer}>
       <div className={styles.toolbar}>

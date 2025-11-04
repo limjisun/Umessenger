@@ -14,6 +14,7 @@ const Login = () => {
       username: values.username,
       email: `${values.username}@example.com`,
       name: values.username,
+      status: 'online' as const,
     };
 
     login(mockUser);
