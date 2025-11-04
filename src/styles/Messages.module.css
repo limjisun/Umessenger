@@ -1,0 +1,417 @@
+/* 전체 컨테이너 - 3단 레이아웃 */
+.messagesContainer {
+  display: flex;
+  height: 100%;
+}
+
+/* 중간 - 쪽지 목록 영역 */
+.messageList {
+  width: 320px;
+  min-width: 300px;
+  max-width: 450px;
+  background-color: white;
+  border-right: 1px solid var(--color-border-light);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sortButton {
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  border: none;
+}
+
+.searchInput {
+  flex: 1;
+}
+
+.tabs {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+/* 쪽지 리스트 */
+.listItems {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.messageItem {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.messageItem:hover {
+  background-color: #FFFAEE;
+}
+
+.messageItem.selected {
+  background-color: #FFFAEE;
+}
+
+.messageItem.unread {
+
+}
+.messageItemHeaderWrap{
+  flex: 1;
+}
+
+.messageItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.userIcon {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
+
+.senderInfoWrap{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+.senderInfo {
+  flex: 1;
+  font-size: 13px;
+  color: #000;
+
+}
+
+.senderInfo strong {
+  font-weight: 600;
+}
+
+.newBadge {
+  background-color: #ff4d4f;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 3px;
+  border-radius: 10px;
+  line-height: 1;
+}
+
+.attachmentIcon {
+  color: #1890ff;
+  font-size: 14px;
+}
+
+.pinIcon {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.messageItemContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.subject {
+  flex: 1;
+  font-size: 13px;
+  color: #8C8C8C;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #8C8C8C;
+  white-space: nowrap;
+}
+
+/* 오른쪽 - 쪽지 상세 영역 */
+.messageDetail {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+.detailHeader {
+  padding: 16px 13px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.senderSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.senderAvatar {
+}
+
+.senderDetails {
+  flex: 1;
+}
+
+.senderDetails h3 {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.receivedDate {
+  margin: 0;
+  font-size: 13px;
+  color: #8c8c8c;
+  min-width: 140px;
+}
+
+.replyButton {
+}
+
+.subjectSection{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.subjectSection h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.detailBody {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.recipientSection {
+  padding: 13px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.recipientRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.recipientRow:last-child {
+  margin-bottom: 0;
+}
+
+.recipientLabel {
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+  color: #595959;
+  font-size: 13px;
+}
+.recipientLabel img{
+  display: block;
+}
+
+.recipientList {
+  flex: 1;
+  color: #262626;
+  font-size: 13px;
+}
+
+.attachmentSection {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+}
+
+.attachmentSection h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.attachmentList {
+  display: flex;
+  gap: 8px;
+}
+
+.attachmentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.downloadButton {
+  background: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.contentSection {
+  line-height: 1.6;
+  color: #262626;
+  font-size: 13px;
+  padding: 20px;
+}
+
+.contentSection p {
+  margin: 0;
+}
+
+/* 우클릭 컨텍스트 메뉴 */
+.contextMenu {
+  position: fixed;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 160px;
+  padding: 4px 0;
+}
+
+.contextMenuItem {
+  display: block;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #262626;
+  transition: background-color 0.2s;
+}
+
+.contextMenuItem:hover {
+  background-color: #f5f5f5;
+}
+
+.contextMenuItem.danger {
+  color: #ff4d4f;
+}
+
+.contextMenuItem.danger:hover {
+  background-color: #fff1f0;
+}
+
+.divider {
+  height: 1px;
+  background-color: #e8e8e8;
+  margin: 4px 0;
+}
+
+/* 정렬 드롭다운 메뉴 */
+.sortDropdown {
+  position: relative;
+}
+
+.sortMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 180px;
+  padding: 4px 0;
+}
+
+.menuItem {
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #262626;
+  transition: background-color 0.2s;
+}
+
+.menuItem:hover {
+  background-color: #f5f5f5;
+}
+
+.menuItemSelected {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.checkmark {
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.menuDivider {
+  height: 1px;
+  background-color: #e8e8e8;
+  margin: 4px 0;
+}
+
+/* 쪽지보내기 버튼 */
+.composeButton {
+  border: none;
+  cursor: pointer;
+}
+
+
+/* 검색 입력 */
+.searchWrapper {
+  position: relative;
+  margin-top: 12px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 5px 32px 5px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8c8c8c;
+}

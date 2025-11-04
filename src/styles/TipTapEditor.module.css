@@ -1,0 +1,204 @@
+.editorContainer {
+  border-top: 1px solid #d9d9d9;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid #d9d9d9;
+  align-items: center;
+}
+
+.toolGroup {
+  display: flex;
+  gap: 2px;
+}
+
+.toolButton {
+  padding: 6px 10px;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolButton:hover:not(:disabled) {
+  background: #e6f4ff;
+  border-color: #1890ff;
+}
+
+.toolButton.active {
+  background: #1890ff;
+  color: white;
+  border-color: #1890ff;
+}
+
+.toolButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: #d9d9d9;
+  margin: 0 4px;
+}
+
+.select {
+  padding: 3px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  height: 27px;
+}
+
+.select:hover {
+  border-color: #1890ff;
+}
+
+.colorPicker {
+  width: 40px;
+  height: 27px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.colorPicker:hover {
+  border-color: #1890ff;
+}
+
+/* TipTap Editor Content Styles */
+.editorContainer :global(.tiptap) {
+  padding: 12px;
+  min-height: 250px;
+  outline: none;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.editorContainer :global(.tiptap:focus) {
+  outline: none;
+}
+
+/* Typography */
+.editorContainer :global(.tiptap h1) {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.67em 0;
+}
+
+.editorContainer :global(.tiptap h2) {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.75em 0;
+}
+
+.editorContainer :global(.tiptap h3) {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 0.83em 0;
+}
+
+.editorContainer :global(.tiptap p) {
+  margin: 0.5em 0;
+}
+
+/* Lists */
+.editorContainer :global(.tiptap ul),
+.editorContainer :global(.tiptap ol) {
+  padding-left: 2em;
+  margin: 0.5em 0;
+}
+
+.editorContainer :global(.tiptap li) {
+  margin: 0.25em 0;
+}
+
+/* Blockquote */
+.editorContainer :global(.tiptap blockquote) {
+  border-left: 4px solid #d9d9d9;
+  padding-left: 1em;
+  margin: 1em 0;
+  color: #666;
+  font-style: italic;
+}
+
+/* Code */
+.editorContainer :global(.tiptap code) {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.editorContainer :global(.tiptap pre) {
+  background: #282c34;
+  color: #abb2bf;
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.editorContainer :global(.tiptap pre code) {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: 0.875em;
+}
+
+/* Links */
+.editorContainer :global(.tiptap a) {
+  color: #1890ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.editorContainer :global(.tiptap a:hover) {
+  color: #40a9ff;
+}
+
+/* Images */
+.editorContainer :global(.tiptap img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 0.5em 0;
+}
+
+/* Text alignment */
+.editorContainer :global(.tiptap .has-text-align-left) {
+  text-align: left;
+}
+
+.editorContainer :global(.tiptap .has-text-align-center) {
+  text-align: center;
+}
+
+.editorContainer :global(.tiptap .has-text-align-right) {
+  text-align: right;
+}
+
+/* Placeholder */
+.editorContainer :global(.tiptap p.is-editor-empty:first-child::before) {
+  content: '내용을 입력하세요...';
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}

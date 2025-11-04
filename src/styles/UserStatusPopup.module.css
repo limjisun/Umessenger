@@ -1,0 +1,97 @@
+/* 오버레이 배경 - 투명하게 (어둡게 하지 않음) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  z-index: 999;
+}
+
+/* 팝업 컨테이너 - 프로필 옆에 위치 */
+.popupContainer {
+  position: fixed;
+  /* 위치: Sidebar 너비(60px) 바로 옆, 프로필 아래쪽 */
+  top: 100px;
+  left: 70px;
+  transform: none;
+
+  /* 크기 조정 */
+  width: 300px;
+  min-height: 200px;
+
+  /* 스타일 */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--color-border-light);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* 팝업 헤더 */
+.popupHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-light);
+  background-color: #fafafa;
+}
+
+.popupHeader h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+/* 팝업 내용 */
+.popupContent {
+  padding: 20px;
+}
+
+/* 상태 섹션 */
+.statusSection {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-dark);
+}
+
+/* 셀렉트 박스 스타일 */
+.statusSelect {
+  width: 100%;
+}
+
+/* 셀렉트 옵션 내부 */
+.statusOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.statusDot.online {
+  background-color: var(--color-status-online);
+}
+
+.statusDot.offline {
+  background-color: var(--color-status-offline);
+}
+
+/* 액션 섹션 */
+.actionSection {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-light);
+}

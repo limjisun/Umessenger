@@ -1,0 +1,19 @@
+.settingsContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.settingsForm {
+  max-width: 600px;
+}

@@ -1,0 +1,301 @@
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Underline } from '@tiptap/extension-underline';
+import { TextAlign } from '@tiptap/extension-text-align';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import { Image } from '@tiptap/extension-image';
+import { Link } from '@tiptap/extension-link';
+import { Extension } from '@tiptap/core';
+import { useEffect } from 'react';
+import styles from '../styles/TipTapEditor.module.css';
+
+// FontSize Extension
+const FontSize = Extension.create({
+  name: 'fontSize',
+  addOptions() {
+    return {
+      types: ['textStyle'],
+    };
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: element => element.style.fontSize || null,
+            renderHTML: attributes => {
+              if (!attributes.fontSize) {
+                return {};
+              }
+              return { style: `font-size: ${attributes.fontSize}` };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setFontSize: (fontSize: string) => ({ chain }: { chain: () => any }) => {
+        return chain().setMark('textStyle', { fontSize }).run();
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      unsetFontSize: () => ({ chain }: { chain: () => any }) => {
+        return chain().setMark('textStyle', { fontSize: null }).updateAttributes('textStyle', { fontSize: null }).run();
+      },
+    };
+  },
+});
+
+interface TipTapEditorProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextStyle,
+      Color,
+      FontSize,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        },
+      }),
+    ],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: styles.editor,
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [value, editor]);
+
+  if (!editor) {
+    return null;
+  }
+
+  const addImage = () => {
+    const url = window.prompt('이미지 URL을 입력하세요:');
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
+
+  const setLink = () => {
+    const url = window.prompt('링크 URL을 입력하세요:');
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run();
+    }
+  };
+
+  return (
+    <div className={styles.editorContainer}>
+      <div className={styles.toolbar}>
+        {/* 텍스트 스타일 */}
+        <div className={styles.toolGroup}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={`${styles.toolButton} ${editor.isActive('bold') ? styles.active : ''}`}
+            title="굵게 (Ctrl+B)"
+          >
+            <strong>B</strong>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={`${styles.toolButton} ${editor.isActive('italic') ? styles.active : ''}`}
+            title="기울임 (Ctrl+I)"
+          >
+            <em>I</em>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={`${styles.toolButton} ${editor.isActive('underline') ? styles.active : ''}`}
+            title="밑줄 (Ctrl+U)"
+          >
+            <u>U</u>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={`${styles.toolButton} ${editor.isActive('strike') ? styles.active : ''}`}
+            title="취소선"
+          >
+            <s>S</s>
+          </button>
+        </div>
+
+        <div className={styles.divider} />
+
+        {/* 헤딩 */}
+        <div className={styles.toolGroup}>
+          <select
+            onChange={(e) => {
+              const level = e.target.value;
+              if (level === 'p') {
+                editor.chain().focus().setParagraph().run();
+              } else {
+                editor.chain().focus().toggleHeading({ level: parseInt(level) as 1 | 2 | 3 }).run();
+              }
+            }}
+            className={styles.select}
+            value={
+              editor.isActive('heading', { level: 1 })
+                ? '1'
+                : editor.isActive('heading', { level: 2 })
+                ? '2'
+                : editor.isActive('heading', { level: 3 })
+                ? '3'
+                : 'p'
+            }
+          >
+            <option value="p">본문</option>
+            <option value="1">제목 1</option>
+            <option value="2">제목 2</option>
+            <option value="3">제목 3</option>
+          </select>
+        </div>
+
+        <div className={styles.divider} />
+
+        {/* 글씨 크기 */}
+        <div className={styles.toolGroup}>
+          <select
+            onChange={(e) => {
+              const size = e.target.value;
+              if (size === 'default') {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (editor.chain().focus() as any).unsetFontSize().run();
+              } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (editor.chain().focus() as any).setFontSize(size).run();
+              }
+            }}
+            className={styles.select}
+            title="글씨 크기"
+          >
+            <option value="default">기본</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
+            <option value="20px">20px</option>
+            <option value="24px">24px</option>
+            <option value="28px">28px</option>
+            <option value="32px">32px</option>
+          </select>
+        </div>
+
+        <div className={styles.divider} />
+
+        {/* 정렬 */}
+        <div className={styles.toolGroup}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            className={`${styles.toolButton} ${editor.isActive({ textAlign: 'left' }) ? styles.active : ''}`}
+            title="왼쪽 정렬"
+          >
+            ☰
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            className={`${styles.toolButton} ${editor.isActive({ textAlign: 'center' }) ? styles.active : ''}`}
+            title="가운데 정렬"
+          >
+            ≡
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            className={`${styles.toolButton} ${editor.isActive({ textAlign: 'right' }) ? styles.active : ''}`}
+            title="오른쪽 정렬"
+          >
+            ☷
+          </button>
+        </div>
+
+        <div className={styles.divider} />
+
+        {/* 목록 */}
+        <div className={styles.toolGroup}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={`${styles.toolButton} ${editor.isActive('bulletList') ? styles.active : ''}`}
+            title="글머리 기호"
+          >
+            • 목록
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={`${styles.toolButton} ${editor.isActive('orderedList') ? styles.active : ''}`}
+            title="번호 매기기"
+          >
+            1. 목록
+          </button>
+        </div>
+
+        <div className={styles.divider} />
+
+        {/* 인용구 & 코드 */}
+        <div className={styles.toolGroup}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={`${styles.toolButton} ${editor.isActive('blockquote') ? styles.active : ''}`}
+            title="인용구"
+          >
+            "
+          </button>
+        </div>
+
+        <div className={styles.divider} />
+
+        {/* 색상 */}
+        <div className={styles.toolGroup}>
+          <input
+            type="color"
+            onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+            className={styles.colorPicker}
+            title="글자 색"
+          />
+        </div>
+      </div>
+        
+      <EditorContent editor={editor} />
+    </div>
+  );
+};
+
+export default TipTapEditor;

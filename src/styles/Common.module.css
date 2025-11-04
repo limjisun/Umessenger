@@ -1,0 +1,25 @@
+.flex{
+    display: flex;
+}
+.alignCenter{
+   align-items: center;
+}
+
+.gap5{
+    gap:5px;
+}
+
+.listHeader {
+  padding: 16px;
+}
+
+.listHeader h2 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+}
+.headerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

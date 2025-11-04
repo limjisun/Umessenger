@@ -1,0 +1,135 @@
+.sidebar {
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border-light);
+  max-width: 61px;
+}
+
+.logo {
+ height: 70px;
+ width: 60px;
+}
+
+.logoImage {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.userProfile {
+  margin-top: 47px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.userProfile:hover {
+  
+}
+
+.avatarWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  background-color: var(--color-primary);
+}
+
+.statusIndicator {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.statusIndicator.online {
+  background-color: var(--color-status-online);
+}
+
+.statusIndicator.offline {
+  background-color: var(--color-status-offline);
+}
+
+.userName {
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.nav {
+  flex: 1;
+  padding: 45px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.navItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+.navset {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+
+.navItem.active {
+  background-color: var(--color-primary);
+}
+
+.iconWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.navIcon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* 신규 메시지 "N" 배지 */
+.newBadge {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  background-color: var(--color-error);
+  color: white;
+  font-size: 10px;
+  min-width: 12px;
+  height: 12px;
+  line-height: 12px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+/* 설정 섹션 - 하단 고정 */
+.settingsSection {
+  padding: 20px 0;
+  margin-top: auto;
+}

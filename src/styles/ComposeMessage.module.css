@@ -1,0 +1,201 @@
+.composeContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.composeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 16px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.composeHeader h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #8c8c8c;
+  padding: 4px 8px;
+}
+
+.closeButton:hover {
+  color: #262626;
+}
+
+.composeBody {
+  flex: 1;
+  overflow-y: auto;
+}
+.titleWrap{
+  padding:20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formGroup {
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  color: #262626;
+  min-width: 70px;
+  line-height: 27px;
+
+}
+
+.inputWithButton {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.inputWithButton2 {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  padding: 4px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #1890ff;
+}
+
+.orgButton {
+  padding: 3px 16px;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+
+.textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c9a7a7;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #1890ff;
+}
+
+.attachmentArea {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+      align-items: baseline;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileLabel {
+  display: inline-block;
+  padding: 3px 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.attachmentList {
+  display: flex;
+  gap: 8px;
+}
+
+.attachmentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0 4px;
+}
+
+.removeButton:hover {
+  color: #ff7875;
+}
+
+.composeFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.cancelButton {
+  padding: 8px 20px;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancelButton:hover {
+  border-color: #40a9ff;
+  color: #40a9ff;
+}
+
+.sendButton {
+  padding: 8px 20px;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sendButton:hover {
+  background-color: #40a9ff;
+}
+
+.charCounter {
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+.overLimit {
+  color: #ff4d4f;
+  font-weight: 600;
+}
