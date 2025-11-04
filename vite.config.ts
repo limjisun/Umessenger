@@ -3,10 +3,11 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
+  base: '/Umessenger/',
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'), // 👈 요 줄 추가!
+      '@': path.resolve(__dirname, './src'),
     },
   },
 })
