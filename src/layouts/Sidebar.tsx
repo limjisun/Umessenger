@@ -6,6 +6,16 @@ import { useNotificationStore } from '../store/notificationStore';
 import { useMessageStore } from '../store/messageStore';
 import UserStatusPopup from '../components/UserStatusPopup';
 import styles from '../styles/Sidebar.module.css';
+import logoImage from '../assets/images/logo.png';
+import defaultAvatar from '../assets/images/default-avatar.png';
+import messageOn from '../assets/images/message-on.png';
+import messageOff from '../assets/images/message-off.png';
+import organizationOn from '../assets/images/organization-on.png';
+import organizationOff from '../assets/images/organization-off.png';
+import noticeOn from '../assets/images/notice-on.png';
+import noticeOff from '../assets/images/notice-off.png';
+import settingsOn from '../assets/images/settings-on.png';
+import settingsOff from '../assets/images/settings-off.png';
 
 interface NavItem {
   key: string;
@@ -19,22 +29,22 @@ const navItems: NavItem[] = [
   {
     key: 'messages',
     title: '쪽지',
-    iconOn: '/src/assets/images/message-on.png',
-    iconOff: '/src/assets/images/message-off.png',
+    iconOn: messageOn,
+    iconOff: messageOff,
     path: '/messages'
   },
   {
     key: 'organization',
     title: '조직도',
-    iconOn: '/src/assets/images/organization-on.png',
-    iconOff: '/src/assets/images/organization-off.png',
+    iconOn: organizationOn,
+    iconOff: organizationOff,
     path: '/organization'
   },
   {
     key: 'notice',
     title: '공지사항',
-    iconOn: '/src/assets/images/notice-on.png',
-    iconOff: '/src/assets/images/notice-off.png',
+    iconOn: noticeOn,
+    iconOff: noticeOff,
     path: '/notice'
   },
 ];
@@ -42,8 +52,8 @@ const navItems: NavItem[] = [
 const settingsItem: NavItem = {
   key: 'settings',
   title: '설정',
-  iconOn: '/src/assets/images/settings-on.png',
-  iconOff: '/src/assets/images/settings-off.png',
+  iconOn: settingsOn,
+  iconOff: settingsOff,
   path: '/settings'
 };
 
@@ -70,7 +80,7 @@ const Sidebar = () => {
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <img
-          src="/src/assets/images/logo.png"
+          src={logoImage}
           alt="메신저 로고"
           className={styles.logoImage}
           onError={(e) => {
@@ -86,10 +96,9 @@ const Sidebar = () => {
         <UserStatusPopup>
           <div className={styles.userProfile}>
             <div className={styles.avatarWrapper}>
-              <Avatar
-                size={20}
-                src="/src/assets/images/default-avatar.png"
-                icon={<UserOutlined />}
+              <img
+                src={defaultAvatar}
+                alt="프로필"
                 className={styles.avatar}
               />
               <span className={`${styles.statusIndicator} ${styles[user.status]}`} />

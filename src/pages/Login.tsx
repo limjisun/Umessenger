@@ -20,8 +20,9 @@ const Login = () => {
     login(mockUser);
 
     // 새 팝업 창으로 메신저 열기 (1000px × 500px)
+    const baseUrl = import.meta.env.BASE_URL || '/';
     window.open(
-      '/messages',
+      `${baseUrl}messages`,
       'messenger',
       'width=1000,height=500,left=100,top=100,resizable=yes,scrollbars=yes'
     );

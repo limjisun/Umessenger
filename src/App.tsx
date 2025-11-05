@@ -18,7 +18,7 @@ const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/Umessenger">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
