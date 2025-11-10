@@ -1,20 +1,35 @@
+
+
 .loginContainer {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   margin: 0;
+  position: absolute;
+  top: 50.4%;
+  width: 100%;
+  transform: translateY(-50%);
 }
 
-.loginBox {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 400px;
+
+.loginlogo{
+    margin-bottom: 40px;
 }
+.loginlogo img{
+    margin: 0 auto;
+}
+.loginBoxWrap{
+  padding: 39px 0 39px;
+  background: #55bec8;
+
+}
+.loginInput{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.loginBox {
+  margin: 0 auto;
+  max-width: 250px;
+}
+
 
 .loginHeader {
   text-align: center;
@@ -36,9 +51,63 @@
 .loginForm {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 40px;
 }
 
 .formGroup {
   margin-bottom: 5px;
+}
+.loginfooter{
+      text-align: center;
+    margin-top: 40px;
+    color: #999;
+    font-size: 11px;
+}
+
+.loginContainer :global(.ant-form-item){
+  margin-bottom: 0 !important;
+}
+
+.loginContainer :global(.ant-input) {
+  height: 34px !important;
+  color: #16858F;
+}
+
+.loginContainer :global(.ant-input-affix-wrapper) {
+  height: 34px !important;
+}
+.loginContainer :global(.ant-input-affix-wrapper .ant-input) {
+  height: auto !important;
+  color: #16858F;
+}
+.loginContainer :global(.ant-btn) {
+  height: 34px !important;
+}
+.loginContainer :global(.ant-input-outlined) {
+  border-color: transparent;
+}
+.loginContainer :global(.ant-input-outlined:focus) {
+  border-color: transparent;
+}
+.loginContainer :global(.ant-input-outlined:hover) {
+  border-color: transparent;
+}
+
+.loginContainer :global(.ant-btn-variant-solid) {
+  background: #16858F;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.loginContainer :global(.ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover) {
+  background: #16858F;
+}
+
+/* 기억하기 체크박스 */
+.rememberItem {
+  text-align: left;
+  margin-top: 10px !important;
+}
+
+.rememberItem :global(.ant-form-item-control-input) {
+  min-height: auto !important;
 }
