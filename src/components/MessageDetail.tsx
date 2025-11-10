@@ -1,17 +1,18 @@
+import { useState } from 'react';
 import type { Message } from '../store/messageStore';
 import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import styles from '../styles/Messages.module.css';
-import profile1 from '../assets/images/profile-1.png';
 import composeIcon from '../assets/images/icon-compose.png';
-import personIcon from '../assets/images/person-icon.png';
-import attachmentImg from '../assets/images/attachmentImg.png';
 
 interface MessageDetailProps {
   message: Message;
 }
 
 const MessageDetail = ({ message }: MessageDetailProps) => {
+  const [showAllRecipients, setShowAllRecipients] = useState(false);
+  const [showAllCC, setShowAllCC] = useState(false);
+  const [showAllAttachments, setShowAllAttachments] = useState(false);
   // 파일 다운로드 처리
   const handleDownload = (file: { name: string; size: number }) => {
     // 실제 파일 다운로드 로직 (브라우저 다운로드)
@@ -49,14 +50,6 @@ const MessageDetail = ({ message }: MessageDetailProps) => {
     <>
       <div className={styles.detailHeader}>
         <div className={styles.senderSection}>
-          <span className={styles.senderAvatar}>
-            <img
-                  src={profile1}
-                  alt="프로필"
-                  width={24}
-                  height={24}
-                />
-          </span>
           <div className={styles.senderDetails}>
             <h3>
               {message.type === 'sent'
@@ -86,7 +79,15 @@ const MessageDetail = ({ message }: MessageDetailProps) => {
         <div className={styles.subjectSection}>
           <h2>{message.subject}</h2>
           <p className={styles.receivedDate}>
-            {new Date(message.timestamp).toLocaleString('ko-KR')}
+            {new Date(message.timestamp).toLocaleString('ko-KR', {
+              hour12: false,
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}
           </p>
         </div>
       </div>
@@ -95,65 +96,150 @@ const MessageDetail = ({ message }: MessageDetailProps) => {
         <div className={styles.recipientSection}>
           <div className={styles.recipientRow}>
             <span className={styles.recipientLabel}>
-              <img
-                src={personIcon}
-                alt="사람아이콘"
-                width={11}
-                height={10}
-              />
               받은사람
             </span>
             <span className={styles.recipientList}>
-              {message.recipients.map((r, i) => (
-                <span key={i}>
-                  {r.name} ({r.username})
-                  {i < message.recipients.length - 1 ? ', ' : ''}
-                </span>
-              ))}
+              {showAllRecipients ? (
+                <>
+                  {message.recipients.map((r, i) => (
+                    <span key={i}>
+                      {r.name} ({r.username})
+                      {i < message.recipients.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
+                  <button
+                    className={styles.toggleButton}
+                    onClick={() => setShowAllRecipients(false)}
+                  >
+                    [접기]
+                  </button>
+                </>
+              ) : message.recipients.length <= 2 ? (
+                <>
+                  {message.recipients.map((r, i) => (
+                    <span key={i}>
+                      {r.name} ({r.username})
+                      {i < message.recipients.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {message.recipients[0].name} ({message.recipients[0].username}), {message.recipients[1].name} ({message.recipients[1].username})
+                  <span className={styles.moreText}> 외 {message.recipients.length - 2}명</span>
+                  <button
+                    className={styles.toggleButton}
+                    onClick={() => setShowAllRecipients(true)}
+                  >
+                    [모두보기]
+                  </button>
+                </>
+              )}
             </span>
           </div>
           {message.cc && message.cc.length > 0 && (
             <div className={styles.recipientRow}>
               <span className={styles.recipientLabel}>
-                <img
-                src={personIcon}
-                alt="사람아이콘"
-                width={11}
-                height={10}
-              />
                 참조
                 </span>
               <span className={styles.recipientList}>
-                {message.cc.map((c, i) => (
-                  <span key={i}>
-                    {c.name} ({c.username})
-                    {i < (message.cc?.length || 0) - 1 ? ', ' : ''}
-                  </span>
-                ))}
+                {showAllCC ? (
+                  <>
+                    {message.cc.map((c, i) => (
+                      <span key={i}>
+                        {c.name} ({c.username})
+                        {i < (message.cc?.length || 0) - 1 ? ', ' : ''}
+                      </span>
+                    ))}
+                    <button
+                      className={styles.toggleButton}
+                      onClick={() => setShowAllCC(false)}
+                    >
+                      [접기]
+                    </button>
+                  </>
+                ) : message.cc.length <= 2 ? (
+                  <>
+                    {message.cc.map((c, i) => (
+                      <span key={i}>
+                        {c.name} ({c.username})
+                        {i < (message.cc?.length || 0) - 1 ? ', ' : ''}
+                      </span>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {message.cc[0].name} ({message.cc[0].username}), {message.cc[1].name} ({message.cc[1].username})
+                    <span className={styles.moreText}> 외 {message.cc.length - 2}명</span>
+                    <button
+                      className={styles.toggleButton}
+                      onClick={() => setShowAllCC(true)}
+                    >
+                      [모두보기]
+                    </button>
+                  </>
+                )}
               </span>
             </div>
           )}
            {message.attachments && message.attachments.length > 0 && (
           <div className={styles.recipientRow}>
             <span className={styles.recipientLabel}>
-             <img
-                  src={attachmentImg}
-                  alt="첨부파일있음"
-                  className={styles.pinIconImg}
-                  width={10}
-                  height={9}
-                /> 첨부파일
+               첨부파일
               </span>
             <div className={styles.attachmentList}>
-              {message.attachments.map((file, i) => (
-                <div key={i} className={styles.attachmentItem}>
-                  <Dropdown menu={{ items: getMenuItems(file) }} trigger={['click']}>
-                    <button className={styles.downloadButton}>
-                      <span>{file.name}</span>
+              {showAllAttachments ? (
+                <>
+                  {message.attachments.map((file, i) => (
+                    <div key={i} className={styles.attachmentItem}>
+                      <Dropdown menu={{ items: getMenuItems(file) }} trigger={['click']}>
+                        <button className={styles.downloadButton}>
+                          <span>{file.name}</span>
+                        </button>
+                      </Dropdown>
+                    </div>
+                  ))}
+                  <button
+                    className={styles.toggleButton}
+                    onClick={() => setShowAllAttachments(false)}
+                  >
+                    [접기]
+                  </button>
+                </>
+              ) : message.attachments.length <= 2 ? (
+                <>
+                  {message.attachments.map((file, i) => (
+                    <div key={i} className={styles.attachmentItem}>
+                      <Dropdown menu={{ items: getMenuItems(file) }} trigger={['click']}>
+                        <button className={styles.downloadButton}>
+                          <span>{file.name}</span>
+                        </button>
+                      </Dropdown>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {message.attachments.slice(0, 2).map((file, i) => (
+                    <div key={i} className={styles.attachmentItem}>
+                      <Dropdown menu={{ items: getMenuItems(file) }} trigger={['click']}>
+                        <button className={styles.downloadButton}>
+                          <span>{file.name}</span>
+                        </button>
+                      </Dropdown>
+                    </div>
+                  ))}
+                  <div>
+                    <span className={styles.moreText}>외 {message.attachments.length - 2}개</span>
+                    <button
+                      className={styles.toggleButton}
+                      onClick={() => setShowAllAttachments(true)}
+                    >
+                      [모두보기]
                     </button>
-                  </Dropdown>
-                </div>
-              ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

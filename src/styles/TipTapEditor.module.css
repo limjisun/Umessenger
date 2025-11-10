@@ -1,5 +1,5 @@
 .editorContainer {
-  border-top: 1px solid #d9d9d9;
+  border-top: 1px solid #eee;
   background: white;
   display: flex;
   flex-direction: column;
@@ -10,8 +10,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  padding: 8px;
-  border-bottom: 1px solid #d9d9d9;
+  padding: 3px 8px;
+  border-bottom: 1px solid #eee;
   align-items: center;
 }
 
@@ -28,7 +28,7 @@
   font-size: 14px;
   transition: all 0.2s;
   min-width: 32px;
-  height: 32px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,12 +59,11 @@
 
 .select {
   padding: 3px 8px;
-  border: 1px solid #d9d9d9;
   border-radius: 4px;
   background: white;
   cursor: pointer;
   font-size: 13px;
-  height: 27px;
+  height: 26px;
 }
 
 .select:hover {

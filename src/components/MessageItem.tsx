@@ -87,8 +87,8 @@ const MessageItem = ({ message, isSelected, onSelect, onContextMenu }: MessageIt
                   src={pinImg}
                   alt="고정됨"
                   className={styles.pinIconImg}
-                  width={14}
-                  height={16}
+                  width={11}
+                  height={14}
                 />
               )}
             </div>
@@ -105,7 +105,7 @@ const MessageItem = ({ message, isSelected, onSelect, onContextMenu }: MessageIt
                   height={9}
                 />
               )}
-              {message.subject}
+              <span>{message.subject}</span>
             </span>
              {!message.isRead && <span className={styles.newBadge}>N</span>}
           </div>

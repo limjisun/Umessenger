@@ -7,7 +7,8 @@ import type { TabItem } from '../components/common/Tabs';
 import { useMessageStore, type Message } from '../store/messageStore';
 import common from '@/styles/Common.module.css';
 import styles from '../styles/Messages.module.css';
-import composeIcon from '../assets/images/icon-compose.png';
+import sortDropdownIcon from '../assets/images/icon-sortdrop.png';
+import noteIcon from '../assets/images/icon-note.png';
 import searchIcon from '../assets/images/icon-search.png';
 
 const Messages = () => {
@@ -97,8 +98,8 @@ const Messages = () => {
   }, [activeTab, messages, sortType, searchQuery]);
 
   const sortMenuItems = [
-    { key: '1', label: '최신 쪽지 순 ⬆️', type: undefined },
-    { key: '2', label: '안 읽은 쪽지 순 ⬆️', type: undefined },
+    { key: '1', label: '최신 쪽지 순', type: undefined },
+    { key: '2', label: '안 읽은 쪽지 순', type: undefined },
     { key: 'divider', label: '', type: 'divider' as const },
     { key: '3', label: '모두 읽음 처리', type: undefined },
   ];
@@ -152,20 +153,18 @@ const Messages = () => {
 
     // 고정/해제 옵션
     if (message.isPinned) {
-      items.push({ key: 'unpin', label: '📌 쪽지 상단 해제', danger: false });
+      items.push({ key: 'unpin', label: '쪽지 상단 해제', danger: false });
     } else {
-      items.push({ key: 'pin', label: '📌 쪽지 상단 고정', danger: false });
+      items.push({ key: 'pin', label: '쪽지 상단 고정', danger: false });
     }
-
-    // 삭제 옵션
-    items.push({ key: 'delete', label: '🗑️ 쪽지 삭제하기', danger: true });
-
     // 보관/보관해제 옵션
     if (message.isArchived) {
-      items.push({ key: 'unarchive', label: '📤 보관함에서 꺼내기', danger: false });
+      items.push({ key: 'unarchive', label: '보관함에서 꺼내기', danger: false });
     } else {
-      items.push({ key: 'archive', label: '📦 쪽지 보관하기', danger: false });
+      items.push({ key: 'archive', label: '쪽지 보관하기', danger: false });
     }
+   // 삭제 옵션
+    items.push({ key: 'delete', label: '쪽지 삭제하기', danger: true });
 
     return items;
   };
@@ -177,15 +176,15 @@ const Messages = () => {
   ];
 
   return (
-    <div className={styles.messagesContainer} onClick={handleCloseContextMenu}>
+    <div className={common.containerWrap} onClick={handleCloseContextMenu}>
       {/* 중간 - 쪽지 목록 */}
-      <div className={styles.messageList}>
+      <div className={common.listLeft}>
         <div className={common.listHeader}>
           <div className={common.headerActions}>
           <div className={`${common.flex} ${common.alignCenter} ${common.gap5}`}>
             <h2>쪽지</h2>
                        
-            <div className={styles.sortDropdown}>
+            <div className={common.sortDropdown}>
               <button
                 className={styles.sortButton}
                 onClick={(e) => {
@@ -193,10 +192,13 @@ const Messages = () => {
                   setSortMenuOpen(!sortMenuOpen);
                 }}
               >
-                ▼
+                 <img
+                src={sortDropdownIcon}
+                alt="정렬"
+              />
               </button>
               {sortMenuOpen && (
-                <div className={styles.sortMenu}>
+                <div className={common.sortMenu}>
                   {sortMenuItems.map((item) => {
                     if (item.type === 'divider') {
                       return <div key={item.key} className={styles.menuDivider} />;
@@ -210,7 +212,7 @@ const Messages = () => {
                     return (
                       <button
                         key={item.key}
-                        className={`${styles.menuItem} ${isSelected ? styles.menuItemSelected : ''}`}
+                        className={`${common.menuItem} ${isSelected ? common.menuItemSelected : ''}`}
                         onClick={() => {
                           if (item.key === '1') {
                             setSortType('latest');
@@ -237,7 +239,7 @@ const Messages = () => {
                 localStorage.clear();
                 window.location.reload();
               }}
-              style={{ padding: '4px 8px', fontSize: '12px', marginRight: '8px' }}
+              style={{ fontSize: '12px', marginRight: '8px' }}
             >
               🔄 초기화
             </button>
@@ -250,7 +252,7 @@ const Messages = () => {
               }}
             >
                <img
-                src={composeIcon}
+                src={noteIcon}
                 alt="쪽지보내기"
                 className={styles.composeIcon}
               />
@@ -258,17 +260,17 @@ const Messages = () => {
             </div>
           </div>
 
-          <div className={styles.searchWrapper}>
+          <div className={common.searchWrapper}>
              <img
               src={searchIcon}
               alt="검색"
-              className={styles.searchIcon}
+              className={common.searchIcon}
             />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={styles.searchInput}
+              className={common.searchInput}
             />
             
           </div>
@@ -276,7 +278,7 @@ const Messages = () => {
 
         <Tabs items={tabItems} activeKey={activeTab} onChange={setActiveTab} />
 
-        <div className={styles.listItems}>
+        <div className={common.listItems}>
           {filteredMessages.map((message) => (
             <MessageItem
               key={message.id}
@@ -295,7 +297,7 @@ const Messages = () => {
       </div>
 
       {/* 오른쪽 - 쪽지 상세 또는 작성 */}
-      <div className={styles.messageDetail}>
+      <div className={common.listDetail}>
         {isComposing ? (
           <ComposeMessage
             onCancel={() => setIsComposing(false)}
@@ -338,13 +340,13 @@ const Messages = () => {
       {/* 우클릭 컨텍스트 메뉴 */}
       {contextMenu.visible && contextMenu.messageId && (
         <div
-          className={styles.contextMenu}
+          className={ `${common.sortMenu} ${common.chat}`}
           style={{ top: contextMenu.y, left: contextMenu.x }}
         >
           {getContextMenuItems(contextMenu.messageId).map((item) => (
             <button
               key={item.key}
-              className={`${styles.contextMenuItem} ${item.danger ? styles.danger : ''}`}
+              className={`${common.menuItem} ${item.danger ? styles.danger : ''}`}
               onClick={() => handleContextMenuAction(item.key, contextMenu.messageId!)}
             >
               {item.label}

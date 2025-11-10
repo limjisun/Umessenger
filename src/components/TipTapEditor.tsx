@@ -102,7 +102,38 @@ const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
 
   return (
     <div className={styles.editorContainer}>
+
+      
       <div className={styles.toolbar}>
+
+        {/* 글씨 크기 */}
+        <div className={styles.toolGroup}>
+          <select
+            onChange={(e) => {
+              const size = e.target.value;
+              if (size === 'default') {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (editor.chain().focus() as any).unsetFontSize().run();
+              } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (editor.chain().focus() as any).setFontSize(size).run();
+              }
+            }}
+            className={styles.select}
+            title="글씨 크기"
+          >
+            <option value="default">기본</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
+            <option value="20px">20px</option>
+            <option value="24px">24px</option>
+            <option value="28px">28px</option>
+            <option value="32px">32px</option>
+          </select>
+        </div>
+
         {/* 텍스트 스타일 */}
         <div className={styles.toolGroup}>
           <button
@@ -138,70 +169,6 @@ const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
             <s>S</s>
           </button>
         </div>
-
-        <div className={styles.divider} />
-
-        {/* 헤딩 */}
-        <div className={styles.toolGroup}>
-          <select
-            onChange={(e) => {
-              const level = e.target.value;
-              if (level === 'p') {
-                editor.chain().focus().setParagraph().run();
-              } else {
-                editor.chain().focus().toggleHeading({ level: parseInt(level) as 1 | 2 | 3 }).run();
-              }
-            }}
-            className={styles.select}
-            value={
-              editor.isActive('heading', { level: 1 })
-                ? '1'
-                : editor.isActive('heading', { level: 2 })
-                ? '2'
-                : editor.isActive('heading', { level: 3 })
-                ? '3'
-                : 'p'
-            }
-          >
-            <option value="p">본문</option>
-            <option value="1">제목 1</option>
-            <option value="2">제목 2</option>
-            <option value="3">제목 3</option>
-          </select>
-        </div>
-
-        <div className={styles.divider} />
-
-        {/* 글씨 크기 */}
-        <div className={styles.toolGroup}>
-          <select
-            onChange={(e) => {
-              const size = e.target.value;
-              if (size === 'default') {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (editor.chain().focus() as any).unsetFontSize().run();
-              } else {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (editor.chain().focus() as any).setFontSize(size).run();
-              }
-            }}
-            className={styles.select}
-            title="글씨 크기"
-          >
-            <option value="default">기본</option>
-            <option value="12px">12px</option>
-            <option value="14px">14px</option>
-            <option value="16px">16px</option>
-            <option value="18px">18px</option>
-            <option value="20px">20px</option>
-            <option value="24px">24px</option>
-            <option value="28px">28px</option>
-            <option value="32px">32px</option>
-          </select>
-        </div>
-
-        <div className={styles.divider} />
-
         {/* 정렬 */}
         <div className={styles.toolGroup}>
           <button
@@ -230,43 +197,7 @@ const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
           </button>
         </div>
 
-        <div className={styles.divider} />
-
-        {/* 목록 */}
-        <div className={styles.toolGroup}>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`${styles.toolButton} ${editor.isActive('bulletList') ? styles.active : ''}`}
-            title="글머리 기호"
-          >
-            • 목록
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={`${styles.toolButton} ${editor.isActive('orderedList') ? styles.active : ''}`}
-            title="번호 매기기"
-          >
-            1. 목록
-          </button>
-        </div>
-
-        <div className={styles.divider} />
-
-        {/* 인용구 & 코드 */}
-        <div className={styles.toolGroup}>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`${styles.toolButton} ${editor.isActive('blockquote') ? styles.active : ''}`}
-            title="인용구"
-          >
-            "
-          </button>
-        </div>
-
-        <div className={styles.divider} />
+        
 
         {/* 색상 */}
         <div className={styles.toolGroup}>

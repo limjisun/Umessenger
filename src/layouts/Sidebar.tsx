@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
   },
   {
     key: 'organization',
-    title: '조직도',
+    title: '사용자목록',
     iconOn: organizationOn,
     iconOff: organizationOff,
     path: '/organization'

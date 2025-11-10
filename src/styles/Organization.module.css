@@ -1,24 +1,325 @@
-.organizationContainer {
+.listItems{
+  padding:10px 20px;
+}
+
+
+.listDetail{
+  overflow: auto;
+}
+
+.treetitle{
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 13px;
+  color: #555;
+}
+
+
+
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #8c8c8c;
+}
+
+.emptyState p {
+  font-size: 14px;
+}
+
+.emptySearch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #8c8c8c;
+}
+
+.emptySearch p {
+  font-size: 14px;
+}
+
+/* 검색 결과 리스트 */
+.searchResultsList {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.userCard {
+  padding: 12px 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.userCard:hover {
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+}
+
+.userHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.userId {
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+.userDepartment {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 2px;
+}
+
+.userPath {
+  font-size: 12px;
+  color: #1890ff;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #f0f0f0;
+  font-weight: 500;
+}
+
+/* 검색 결과 헤더 */
+.searchHeader {
+  padding: 16px 20px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+/* 멤버 카드의 경로 표시 */
+.memberPath {
+  font-size: 12px;
+  color: #1890ff;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  font-weight: 500;
+}
+
+/* 오른쪽 상세 영역 */
+.detailContainer {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.header {
-  margin-bottom: 20px;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 24px;
-  color: #333;
-}
-
-.treeContainer {
-  flex: 1;
-  overflow-y: auto;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  padding: 20px;
   background-color: white;
 }
+
+/* 경로 표시 (Breadcrumb) */
+.breadcrumb {
+  padding: 10px 20px;
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #EEE;
+  border-top: 1px solid #EEE;
+  font-size: 13px;
+  color: #222;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.separator {
+  margin: 0 5px;
+  color: #222;
+}
+
+.pathItem {
+  color: #222;
+  font-weight: 500;
+}
+
+.pathItem:last-child {
+  color: #222;
+  font-weight: 400;
+}
+
+
+.teamSection:last-child {
+  margin-bottom: 0;
+}
+
+/* 팀원 목록 섹션 */
+.membersSection {
+  padding: 20px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e8e8e8;
+}
+
+.emptyMembers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #8c8c8c;
+}
+
+.emptyMembers p {
+  font-size: 14px;
+}
+
+.membersList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 9px;
+}
+
+.memberCard {
+  background-color: white;
+}
+
+
+.memberHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.profilecheck{
+ position: relative;
+}
+.profilecheck.on::before{
+ content: '';
+ position: absolute;
+ width: 8px;
+ height: 8px;
+ border: 1px solid #fff;
+ background: #55BEC8;
+ border-radius: 50%;
+}
+
+.memberName {
+  font-size: 13px;
+  font-weight: 400;
+  color: #222;
+}
+
+.memberId {
+  font-size: 13px;
+  color: #222;
+}
+
+.sendMessageBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.messageIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.memberDepartment {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 4px;
+}
+
+/* 마이리스트 사용자 상세 보기 */
+.userDetailHeader {
+  padding: 24px 20px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userDetailName {
+  font-size: 24px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0;
+}
+
+.userDetailId {
+  font-size: 16px;
+  color: #8c8c8c;
+}
+
+.userDetailSection {
+  padding: 20px;
+}
+
+.userDetailRow {
+  display: flex;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.userDetailRow:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  width: 120px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #595959;
+}
+
+.detailValue {
+  flex: 1;
+  font-size: 14px;
+  color: #262626;
+}
+
+/* 오프라인 숨김 필터 섹션 */
+.filterSection {
+  padding: 12px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #262626;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+

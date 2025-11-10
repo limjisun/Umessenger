@@ -1,7 +1,7 @@
 .tabs {
   display: flex;
   border-bottom: 1px solid #e8e8e8;
-  padding: 0 14px;
+  padding: 0 10px;
 }
 
 .tab {
@@ -14,9 +14,10 @@
   border-radius: 3px 3px 0 0;
   font-weight: 500;
   border: 1px solid #EEE;
-  border-bottom: 0;
+  border-bottom: 1px solid transparent;
   color: #999;
   transition: all 0.2s;
+  margin-bottom: -1px;
 }
 .tab+.tab{
  margin-left: -1px;

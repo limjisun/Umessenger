@@ -9,8 +9,22 @@
     gap:5px;
 }
 
+.containerWrap{
+  display: flex;
+  height: 100%;
+}
+.listLeft{
+  width: 320px;
+  min-width: 300px;
+  max-width: 450px;
+  background-color: white;
+  border-right: 1px solid var(--color-border-light);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 .listHeader {
-  padding: 16px;
+  padding: 7px 16px 10px
 }
 
 .listHeader h2 {
@@ -22,4 +36,98 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  line-height: 20px;
+}
+
+.listItems {
+  flex: 1;
+  overflow-y: auto;
+}
+/* 오른쪽 상세 영역 */
+.listDetail {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+/* 검색 입력 */
+.searchWrapper {
+  position: relative;
+  margin-top: 5px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 5px 32px 5px 12px;
+  border: 1px solid #E3E3E3;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8c8c8c;
+}
+
+
+/* 정렬 드롭다운 메뉴 */
+.sortDropdown {
+  position: relative;
+}
+
+.sortMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 140px;
+  padding: 10px 12px;
+}
+
+.sortMenu.chat{
+  width: 100px;
+  min-width: 120px;
+}
+
+.menuItem {
+  width: 100%;
+  padding: 4px 6px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  height: 28px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.menuItem:hover {
+  background-color: #f5f5f5;
+}
+
+.menuItemSelected {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.checkmark {
+  font-weight: bold;
+  color: #333;
+}
+
+.menuDivider {
+  height: 1px;
+  background-color: #e8e8e8;
+  margin: 4px 0;
 }

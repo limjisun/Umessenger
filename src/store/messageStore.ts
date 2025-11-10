@@ -58,11 +58,12 @@ export const useMessageStore = create<MessageState>()(
           hasAttachment: true,
           isPinned: false,
           recipients: [{ name: '임지선', username: 'joy' }, { name: '정태우', username: 'jung789' },
-            { name: '최민준', username: 'choi012' }],
+            { name: '최민준', username: 'choi012' }, { name: '정태우', username: 'jung789' }, { name: '정태우', username: 'jung789' }, { name: '정태우', username: 'jung789' }],
           cc: [{ name: '박민수', username: 'park123' }],
           attachments: [
             { name: '일정안.pdf', size: 1024000, url: '#' },
-            { name: '참고자료.xlsx', size: 512000, url: '#' }
+            { name: '참고자료.xlsx', size: 512000, url: '#' },
+            { name: 'test.xlsx', size: 512000, url: '#' }
           ],
           type: 'received',
           isArchived: false,
@@ -126,7 +127,7 @@ export const useMessageStore = create<MessageState>()(
         {
           id: '6',
           sender: { name: '정수연', username: 'jung456' },
-          subject: '마케팅 전략 회의 요청',
+          subject: '마케팅 전략 회의 요청 마케팅 전략 회의 요청 마케팅 전략 회의 요청 마케팅 전략 회의 요청 마케팅 전략 회의 요청',
           content: '<p>다음 달 마케팅 전략에 대해 논의하고 싶습니다. 회의 일정을 잡아주세요.</p>',
           timestamp: new Date('2024-11-04T11:30:00'),
           isRead: false,

@@ -4,7 +4,8 @@ import TipTapEditor from './TipTapEditor';
 import Button from './common/Button';
 import common from '@/styles/Common.module.css';
 import styles from '../styles/ComposeMessage.module.css';
-
+import { useOrganizationStore } from '../store/organizationStore';
+import groupIcon from '../assets/images/icon-group.png';
 interface ComposeMessageProps {
   onCancel: () => void;
   onSend: (data: MessageData) => void;
@@ -18,14 +19,26 @@ interface MessageData {
   attachments: File[];
 }
 
+interface User {
+  name: string;
+  username: string;
+}
+
 const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
-  const [recipients, setRecipients] = useState('');
-  const [cc, setCc] = useState('');
+  const searchUsers = useOrganizationStore((state) => state.searchUsers);
+
+  const [recipients, setRecipients] = useState<User[]>([]);
+  const [cc, setCc] = useState<User[]>([]);
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [showOrgPicker, setShowOrgPicker] = useState(false);
   const [pickerMode, setPickerMode] = useState<'recipients' | 'cc'>('recipients');
+
+  const [recipientInput, setRecipientInput] = useState('');
+  const [ccInput, setCcInput] = useState('');
+  const [recipientSuggestions, setRecipientSuggestions] = useState<User[]>([]);
+  const [ccSuggestions, setCcSuggestions] = useState<User[]>([]);
 
   // 글자 수 계산 (HTML 태그 제거)
   const getTextLength = (html: string) => {
@@ -47,19 +60,70 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
   };
 
   const handleOrgPickerSelect = (users: Array<{ name: string; username: string }>) => {
-    const userNames = users.map(u => u.name).join(', ');
     if (pickerMode === 'recipients') {
-      setRecipients(recipients ? `${recipients}, ${userNames}` : userNames);
+      setRecipients([...recipients, ...users]);
     } else {
-      setCc(cc ? `${cc}, ${userNames}` : userNames);
+      setCc([...cc, ...users]);
     }
     setShowOrgPicker(false);
   };
 
+  const handleRemoveRecipient = (index: number) => {
+    setRecipients(recipients.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveCC = (index: number) => {
+    setCc(cc.filter((_, i) => i !== index));
+  };
+
+  // 받는사람 검색
+  const handleRecipientInputChange = (value: string) => {
+    setRecipientInput(value);
+    if (value.trim()) {
+      const results = searchUsers(value);
+      // 이미 선택된 사용자는 제외
+      const filtered = results.filter(
+        (user) => !recipients.some((r) => r.username === user.username)
+      );
+      setRecipientSuggestions(filtered);
+    } else {
+      setRecipientSuggestions([]);
+    }
+  };
+
+  // 참조 검색
+  const handleCcInputChange = (value: string) => {
+    setCcInput(value);
+    if (value.trim()) {
+      const results = searchUsers(value);
+      // 이미 선택된 사용자는 제외
+      const filtered = results.filter(
+        (user) => !cc.some((c) => c.username === user.username)
+      );
+      setCcSuggestions(filtered);
+    } else {
+      setCcSuggestions([]);
+    }
+  };
+
+  // 받는사람 선택
+  const handleSelectRecipient = (user: User) => {
+    setRecipients([...recipients, user]);
+    setRecipientInput('');
+    setRecipientSuggestions([]);
+  };
+
+  // 참조 선택
+  const handleSelectCC = (user: User) => {
+    setCc([...cc, user]);
+    setCcInput('');
+    setCcSuggestions([]);
+  };
+
   const handleSend = () => {
     // 유효성 검사
-    if (!recipients.trim()) {
-      alert('받는 사람을 입력해주세요.');
+    if (recipients.length === 0) {
+      alert('받는 사람을 선택해주세요.');
       return;
     }
 
@@ -75,8 +139,8 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
     }
 
     const messageData: MessageData = {
-      recipients: recipients.split(',').map(r => r.trim()).filter(r => r),
-      cc: cc.split(',').map(c => c.trim()).filter(c => c),
+      recipients: recipients.map(u => `${u.name} (${u.username})`),
+      cc: cc.map(u => `${u.name} (${u.username})`),
       subject,
       content,
       attachments,
@@ -88,9 +152,9 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
     <div className={styles.composeContainer}>
       <div className={styles.composeHeader}>
         <h2>쪽지 보내기</h2>
-        <button className={styles.closeButton} onClick={onCancel}>
+        {/* <button className={styles.closeButton} onClick={onCancel}>
           ✕
-        </button>
+        </button> */}
       </div>
 
       <div className={styles.composeBody}>
@@ -98,13 +162,42 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
           <div className={styles.formGroup}>
             <div className={styles.inputWithButton}>
               <label className={styles.label}>받는사람</label>
-              <input
-                type="text"
-                placeholder="이름 또는 아이디 입력 (쉼표로 구분)"
-                value={recipients}
-                onChange={(e) => setRecipients(e.target.value)}
-                className={styles.input}
-              />
+              <div className={styles.searchInputWrapper}>
+                <div className={styles.chipInputContainer}>
+                  {recipients.map((user, index) => (
+                    <div key={index} className={styles.userChip}>
+                      <span>{user.name} ({user.username})</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveRecipient(index)}
+                        className={styles.chipRemoveButton}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  <input
+                    type="text"
+                    placeholder="이름 또는 아이디 입력"
+                    value={recipientInput}
+                    onChange={(e) => handleRecipientInputChange(e.target.value)}
+                    className={styles.searchInput}
+                  />
+                </div>
+                {recipientSuggestions.length > 0 && (
+                  <div className={styles.suggestionList}>
+                    {recipientSuggestions.map((user, index) => (
+                      <div
+                        key={index}
+                        className={styles.suggestionItem}
+                        onClick={() => handleSelectRecipient(user)}
+                      >
+                        {user.name} ({user.username})
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button
                 type="button"
                 className={styles.orgButton}
@@ -113,7 +206,10 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
                   setShowOrgPicker(true);
                 }}
               >
-                조직도
+                <img
+                  src={groupIcon}
+                  alt="조직도"
+                />
               </button>
             </div>
           </div>
@@ -121,13 +217,42 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
           <div className={styles.formGroup}>
             <div className={styles.inputWithButton}>
               <label className={styles.label}>참조</label>
-              <input
-                type="text"
-                placeholder="참조 (선택사항)"
-                value={cc}
-                onChange={(e) => setCc(e.target.value)}
-                className={styles.input}
-              />
+              <div className={styles.searchInputWrapper}>
+                <div className={styles.chipInputContainer}>
+                  {cc.map((user, index) => (
+                    <div key={index} className={styles.userChip}>
+                      <span>{user.name} ({user.username})</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveCC(index)}
+                        className={styles.chipRemoveButton}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  <input
+                    type="text"
+                    placeholder="참조 (선택사항)"
+                    value={ccInput}
+                    onChange={(e) => handleCcInputChange(e.target.value)}
+                    className={styles.searchInput}
+                  />
+                </div>
+                {ccSuggestions.length > 0 && (
+                  <div className={styles.suggestionList}>
+                    {ccSuggestions.map((user, index) => (
+                      <div
+                        key={index}
+                        className={styles.suggestionItem}
+                        onClick={() => handleSelectCC(user)}
+                      >
+                        {user.name} ({user.username})
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button
                 type="button"
                 className={styles.orgButton}
@@ -136,7 +261,10 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
                   setShowOrgPicker(true);
                 }}
               >
-                조직도
+                 <img
+                  src={groupIcon}
+                  alt="조직도"
+                />
               </button>
             </div>
           </div>
@@ -165,7 +293,7 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
                 id="file-upload"
               />
               <label htmlFor="file-upload" className={styles.fileLabel}>
-                 파일 선택
+                 내 PC
               </label>
               {attachments.length > 0 && (
                 <div className={styles.attachmentList}>

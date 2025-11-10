@@ -1,0 +1,152 @@
+/* 토글 스위치 스타일 */
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggleLabel.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.labelText {
+  font-size: 13px;
+  color: #777;
+  font-weight: 400;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggleInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d9d9d9;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggleInput:checked + .toggleSlider {
+  background-color: #55BEC8;
+}
+
+.toggleInput:checked + .toggleSlider:before {
+  transform: translateX(20px);
+}
+
+.toggleInput:disabled + .toggleSlider {
+  cursor: not-allowed;
+}
+
+/* 일반 체크박스 스타일 */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.checkboxLabel.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkboxInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.checkboxCustom {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d9d9d9;
+  border-radius: 4px;
+  background-color: white;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.checkboxInput:checked + .checkboxCustom {
+  background-color: #55BEC8;
+  border-color: #55BEC8;
+}
+
+.checkboxInput:checked + .checkboxCustom:after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkboxInput:hover + .checkboxCustom {
+  border-color: #55BEC8;
+}
+
+.checkboxInput:disabled + .checkboxCustom {
+  cursor: not-allowed;
+  background-color: #f5f5f5;
+}
+
+/* 이미지 기반 체크박스 */
+.checkboxImage {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.checkboxImage:hover {
+  transform: scale(1.1);
+}
+
+.checkboxLabel.disabled .checkboxImage {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkboxLabel.disabled .checkboxImage:hover {
+  transform: scale(1);
+}

@@ -9,14 +9,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 13px 16px;
-  border-bottom: 1px solid #e8e8e8;
+  height: 40px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #EEE;
 }
 
 .composeHeader h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
+  color: #222;
 }
 
 .closeButton {
@@ -37,10 +39,10 @@
   overflow-y: auto;
 }
 .titleWrap{
-  padding:20px;
+  padding:10px 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .formGroup {
@@ -49,8 +51,8 @@
 .label {
   display: block;
   font-size: 13px;
-  color: #262626;
-  min-width: 70px;
+  color: #888;
+  min-width: 60px;
   line-height: 27px;
 
 }
@@ -68,9 +70,10 @@
 .input {
   flex: 1;
   padding: 4px 12px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #e3e3e3;
   border-radius: 4px;
   font-size: 13px;
+  color: #444;
 }
 
 .input:focus {
@@ -78,10 +81,96 @@
   border-color: #1890ff;
 }
 
-.orgButton {
-  padding: 3px 16px;
-  background-color: white;
+/* 검색 입력 래퍼 */
+.searchInputWrapper {
+  flex: 1;
+  position: relative;
+}
+
+/* 칩 + 입력 컨테이너 */
+.chipInputContainer {
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 검색 입력 */
+.searchInput {
+  flex: 1;
+  min-width: 150px;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  padding: 2px 4px;
+}
+
+.searchInput::placeholder {
+  color: #bfbfbf;
+}
+
+/* 사용자 칩 */
+.userChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #777;
+  white-space: nowrap;
+}
+
+.chipRemoveButton {
+  background: none;
+  border: none;
+  color: #8c8c8c;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+}
+
+.chipRemoveButton:hover {
+  color: #ff4d4f;
+}
+
+/* 자동완성 목록 */
+.suggestionList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
   border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestionItem {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #262626;
+}
+
+.suggestionItem:hover {
+  background-color: #f5f5f5;
+}
+
+.orgButton {
+  padding: 6px 7px;
+  background-color: white;
+  border: 1px solid #E3E3E3;
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
@@ -117,10 +206,11 @@
 
 .fileLabel {
   display: inline-block;
-  padding: 3px 16px;
-  background-color: #f5f5f5;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  padding: 3px 8px;
+  background-color: #fff;
+  border: 1px solid #02AFBF;
+  color: #02AFBF;
+  border-radius: 3px;
   cursor: pointer;
   font-size: 13px;
   transition: all 0.2s;
@@ -128,14 +218,16 @@
 
 .attachmentList {
   display: flex;
-  gap: 8px;
+  gap: 5px;
+  flex-wrap: wrap;
 }
 
 .attachmentItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 8px;
+  padding: 2px 8px;
+      color: #777;
   background-color: #f5f5f5;
   border-radius: 4px;
   font-size: 13px;
@@ -144,7 +236,7 @@
 .removeButton {
   background: none;
   border: none;
-  color: #333;
+  color: #777;
   cursor: pointer;
   font-size: 13px;
   padding: 0 4px;
@@ -157,9 +249,11 @@
 .composeFooter {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 8px;
-  padding: 16px 20px;
-  border-top: 1px solid #e8e8e8;
+  padding: 13px 20px;
+  height: 57px;
+  border-top: 1px solid #EEE;
 }
 
 .cancelButton {

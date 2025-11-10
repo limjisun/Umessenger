@@ -13,7 +13,7 @@
 
 .pickerContainer {
   width: 600px;
-  max-height: 700px;
+  height: 500px;
   background-color: white;
   border-radius: 8px;
   display: flex;
@@ -54,103 +54,31 @@
   max-height: 350px;
 }
 
-/* 조직도 트리 */
-.treeNode {
-  margin-bottom: 4px;
+/* antd Tree 커스텀 스타일 */
+.pickerBody :global(.ant-tree) {
+  background: transparent;
+  font-size: 14px;
 }
 
-.nodeHeader {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
+.pickerBody :global(.ant-tree-node-content-wrapper) {
   transition: background-color 0.2s;
 }
 
-.nodeHeader:hover {
+.pickerBody :global(.ant-tree-node-content-wrapper:hover) {
   background-color: #f5f5f5;
 }
 
-.expandIcon {
-  font-size: 10px;
-  color: #8c8c8c;
-  width: 16px;
+.pickerBody :global(.ant-tree-node-selected) {
+  background-color: #e6f7ff !important;
 }
 
-.folderIcon {
-  font-size: 16px;
+.pickerBody :global(.ant-tree-checkbox) {
+  margin-right: 8px;
 }
 
-.nodeName {
-  font-size: 14px;
-  font-weight: 500;
+.pickerBody :global(.ant-tree-title) {
   color: #262626;
-}
-
-.userItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  font-size: 14px;
-}
-
-.userItem:hover {
-  background-color: #f5f5f5;
-}
-
-.userItem.selected {
-  background-color: #e6f7ff;
-}
-
-.userItem input[type="checkbox"],
-.userItem input[type="radio"] {
-  cursor: pointer;
-}
-
-.userName {
   font-weight: 500;
-  color: #262626;
-}
-
-.userInfo {
-  color: #8c8c8c;
-  font-size: 13px;
-}
-
-.userPosition {
-  margin-left: auto;
-  padding: 2px 8px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #595959;
-}
-
-/* 마이리스트 */
-.myListContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.listGroup {
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.listHeader {
-  padding: 10px 12px;
-  background-color: #fafafa;
-  font-weight: 600;
-  font-size: 14px;
-  border-bottom: 1px solid #e8e8e8;
 }
 
 /* 선택된 사용자 섹션 */
