@@ -34,6 +34,7 @@ interface OrganizationState {
   allUsersWithPath: OrgUserWithPath[]; // 경로 정보 포함 사용자 목록
   searchUsers: (query: string) => OrgUserWithPath[];
   getUserById: (id: string) => OrgUser | undefined;
+  setMyLists: (lists: MyList[]) => void; // 마이리스트 저장 함수
 }
 
 // 조직도 데이터 (센터 > 테넌트 > 그룹 > 팀 > 팀원)
@@ -142,25 +143,12 @@ const orgTreeData: OrgTreeNode = {
   ],
 };
 
-// 마이리스트 데이터
+// 마이리스트 데이터 (기본값: 빈 새그룹)
 const myListsData: MyList[] = [
   {
-    id: 'list1',
-    name: '자주 연락하는 사람',
-    users: [
-      { id: 'u1', name: '홍길동', username: 'NEXT0001', department: '인사팀', isOnline: true },
-      { id: 'u10', name: '클라우드', username: 'NEXT0017', department: '디지털마케팅팀', isOnline: true },
-      { id: 'u5', name: '홍길상', username: 'NEXT01024', department: '프론트엔드팀', isOnline: true },
-    ],
-  },
-  {
-    id: 'list2',
-    name: '프로젝트 팀원',
-    users: [
-      { id: 'u6', name: '정서연', username: 'NEXT0005', department: '프론트엔드팀', isOnline: true },
-      { id: 'u7', name: '최민준', username: 'NEXT0006', department: '프론트엔드팀', isOnline: false },
-      { id: 'u9', name: '윤서준', username: 'NEXT0008', department: '백엔드팀', isOnline: false },
-    ],
+    id: 'list-default',
+    name: '새그룹',
+    users: [],
   },
 ];
 
@@ -192,7 +180,7 @@ const flattenOrgTreeWithPath = (node: OrgTreeNode, path: string[] = []): OrgUser
   return usersWithPath;
 };
 
-export const useOrganizationStore = create<OrganizationState>(() => ({
+export const useOrganizationStore = create<OrganizationState>((set) => ({
   orgTree: orgTreeData,
   myLists: myListsData,
   allUsers: flattenOrgTree(orgTreeData),
@@ -214,5 +202,10 @@ export const useOrganizationStore = create<OrganizationState>(() => ({
   getUserById: (id: string) => {
     const allUsers = flattenOrgTree(orgTreeData);
     return allUsers.find((user) => user.id === id);
+  },
+
+  // 마이리스트 저장
+  setMyLists: (lists: MyList[]) => {
+    set({ myLists: lists });
   },
 }));

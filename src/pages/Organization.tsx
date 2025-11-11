@@ -13,9 +13,10 @@ import centerIcon from '../assets/images/icon-center.png';
 import tenantIcon from '../assets/images/icon-tenant.png';
 import groupIcon from '../assets/images/icon-group.png';
 import teamIcon from '../assets/images/icon-team.png';
-import personIcon from '../assets/images/person-icon.png';
 import arrowDown from '../assets/images/tree_on.png';
 import arrowRight from '../assets/images/tree_off.png';
+import mysettingsIcon from '../assets/images/icon-mylistSet.png';
+import mylistIcon from '../assets/images/icon-mylist.png';
 
 // 조직도 노드 정보
 interface OrgNodeInfo {
@@ -133,7 +134,13 @@ const Organization = () => {
   const [activeTab, setActiveTab] = useState<string>('org');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedNode, setSelectedNode] = useState<OrgNodeInfo | null>(null);
-  const [selectedUser, setSelectedUser] = useState<OrgUser | null>(null);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+
+  // 설정 버튼 클릭 핸들러
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+    setSelectedNode(null);
+  };
 
   // 조직도 노드 맵
   const orgNodeMap = useMemo(() => new Map<string, OrgNodeInfo>(), []);
@@ -147,18 +154,14 @@ const Organization = () => {
   // 마이리스트 트리 데이터
   const myListTreeData = useMemo(() => {
     return myLists.map((list) => ({
-      title: `⭐ ${list.name}`,
+      title: (
+        <span className={styles.treetitle}>
+          <img src={mylistIcon} alt="" style={{ width: '14px', height: '12px' }} />
+          {list.name} <span className={styles.mylength}>{list.users.length}</span>
+        </span>
+      ),
       key: `list-${list.id}`,
-      children: list.users.map((user) => ({
-        title: (
-          <span className={styles.treetitle}>
-            <img src={personIcon} alt="" style={{ width: '14px', height: '12px' }} />
-            {`${user.name} (${user.username})`}
-          </span>
-        ),
-        key: `user-${user.id}`,
-        isLeaf: true,
-      })),
+      isLeaf: true, // 직원 목록 제거, 그룹만 표시
     }));
   }, [myLists]);
 
@@ -166,7 +169,6 @@ const Organization = () => {
   const handleTreeSelect = (selectedKeys: React.Key[]) => {
     if (selectedKeys.length === 0) {
       setSelectedNode(null);
-      setSelectedUser(null);
       return;
     }
 
@@ -177,23 +179,31 @@ const Organization = () => {
       const nodeInfo = orgNodeMap.get(key);
       if (nodeInfo) {
         setSelectedNode(nodeInfo);
-        setSelectedUser(null);
       }
     }
     // 마이리스트 탭일 때
     else if (activeTab === 'mylist') {
-      if (key.startsWith('user-')) {
-        const userId = key.replace('user-', '');
-        const allUsers = myLists.flatMap(list => list.users);
-        const user = allUsers.find(u => u.id === userId);
-        if (user) {
-          setSelectedUser(user);
-          setSelectedNode(null);
+      if (key.startsWith('list-')) {
+        // 그룹 선택 시 OrgDetailView 형식으로 표시
+        const listId = key.replace('list-', '');
+        const list = myLists.find(l => l.id === listId);
+        if (list) {
+          // 마이리스트 그룹을 OrgNodeInfo 형식으로 변환
+          setSelectedNode({
+            id: list.id,
+            name: list.name,
+            users: list.users,
+            path: [list.name],
+            teamGroups: list.users.length > 0 ? [{
+              teamId: list.id,
+              teamName: list.name,
+              path: [list.name],
+              users: list.users,
+            }] : undefined,
+          });
         }
-      } else {
-        setSelectedUser(null);
-        setSelectedNode(null);
       }
+      // 개별 사용자 클릭은 무시 (그룹에서 이미 모든 사용자를 보여주므로)
     }
   };
 
@@ -276,9 +286,23 @@ const Organization = () => {
           </div>
         </div>
 
-        <Tabs items={tabItems} activeKey={activeTab} onChange={setActiveTab} />
+        <Tabs items={tabItems} activeKey={activeTab} onChange={(key) => {
+          setActiveTab(key);
+          // 탭 전환 시 선택 상태 초기화
+          setSelectedNode(null);
+          setShowSettings(false);
+        }} />
 
         <div className={`${common.listItems} ${styles.listItems}`}>
+          {activeTab === 'mylist' && (
+              <button
+                onClick={handleSettingsClick}
+                className={styles.settingsButton}
+                title="마이리스트 설정"
+              >
+                <img src={mysettingsIcon} alt="설정" />
+              </button>
+          )}
           <Tree
             showLine
             defaultExpandAll
@@ -290,10 +314,10 @@ const Organization = () => {
               }
               // 펼쳐진 상태면 ▼, 닫힌 상태면 ▶
               return (
-                <img 
-                  src={expanded ? arrowDown : arrowRight} 
-                  alt="" 
-                  style={{ width: '12px', height: '11px' }} 
+                <img
+                  src={expanded ? arrowDown : arrowRight}
+                  alt=""
+                  style={{ width: '12px', height: '11px' }}
                 />
               );
             }}
@@ -311,13 +335,14 @@ const Organization = () => {
               <p>검색 결과가 없습니다</p>
             </div>
           )
+        ) : showSettings ? (
+          // 마이리스트 설정 화면
+          <MyListDetailView isSettings onClose={() => setShowSettings(false)} />
         ) : selectedNode ? (
           <OrgDetailView selectedNode={selectedNode} />
-        ) : selectedUser ? (
-          <MyListDetailView selectedUser={selectedUser} />
         ) : (
           <div className={styles.emptyState}>
-            <p>{activeTab === 'org' ? '조직을 선택해주세요' : '사용자를 선택해주세요'}</p>
+            <p>{activeTab === 'org' ? '조직을 선택해주세요' : '그룹을 선택해주세요'}</p>
           </div>
         )}
       </div>

@@ -133,7 +133,7 @@ table {
 
 /* Tree 노드 호버 색상 */
 .ant-tree .ant-tree-node-content-wrapper:hover {
-  background-color: #FFFAEE !important;
+  background-color: transparent !important;
 }
 
 /* Tree 노드 선택 색상 */
@@ -143,5 +143,31 @@ table {
 
 /* Tree 노드 선택된 상태에서 호버 */
 .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover {
-  background-color: #FFFAEE !important;
+  background-color: transparent !important;
+}
+.ant-tree{
+  font-size: 13px !important;
+  color: #555;
+
+}
+/* Tree 체크박스 커스텀 스타일 */
+.ant-tree-checkbox-inner {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 0px !important;
+  background-image: url('./assets/images/check_off.png') !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.ant-tree-checkbox-inner::after {
+  display: none !important;
+}
+
+.ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+  background-image: url('./assets/images/check_on.png') !important;
+  background-color: transparent !important;
+  border: none !important;
 }

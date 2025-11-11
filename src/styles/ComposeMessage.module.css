@@ -76,11 +76,6 @@
   color: #444;
 }
 
-.input:focus {
-  outline: none;
-  border-color: #1890ff;
-}
-
 /* 검색 입력 래퍼 */
 .searchInputWrapper {
   flex: 1;

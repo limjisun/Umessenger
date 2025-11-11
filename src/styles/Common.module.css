@@ -42,6 +42,7 @@
 .listItems {
   flex: 1;
   overflow-y: auto;
+  position: relative;
 }
 /* 오른쪽 상세 영역 */
 .listDetail {
@@ -95,7 +96,7 @@
 
 .sortMenu.chat{
   width: 100px;
-  min-width: 120px;
+  min-width: 133px;
 }
 
 .menuItem {
