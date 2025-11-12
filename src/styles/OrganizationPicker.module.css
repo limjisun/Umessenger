@@ -12,10 +12,9 @@
 }
 
 .pickerContainer {
-  width: 600px;
-  height: 500px;
+  width: 300px;
+  height: 600px;
   background-color: white;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -25,39 +24,52 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 0px 16px;
+  background: #55BDC7;
+  height: 26px;
 }
 
 .pickerHeader h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
+  color: #fff;
 }
 
 .closeButton {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 13px;
   cursor: pointer;
-  color: #8c8c8c;
-  padding: 4px 8px;
+  color: #fff;
+  padding: 4px 0px;
 }
-
-.closeButton:hover {
-  color: #262626;
+.tabwrap{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+.searchWrap{
+  padding:10px;
+}
+.searchWrap h2{
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 7px;
 }
 
 .pickerBody {
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-  max-height: 350px;
+  max-height: 330px;
 }
 
 /* antd Tree 커스텀 스타일 */
 .pickerBody :global(.ant-tree) {
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .pickerBody :global(.ant-tree-node-content-wrapper) {
@@ -77,8 +89,8 @@
 }
 
 .pickerBody :global(.ant-tree-title) {
-  color: #262626;
-  font-weight: 500;
+  color: #555;
+  font-weight: 400;
 }
 
 /* 선택된 사용자 섹션 */
@@ -132,6 +144,6 @@
 .pickerFooter {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: 8px;
   padding: 16px 20px;
 }

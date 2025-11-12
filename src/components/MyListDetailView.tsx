@@ -519,6 +519,17 @@ const MyListDetailView = ({ onClose }: MyListDetailViewProps) => {
                     setSelectedOrgKeys(keys.checked);
                   }
                 }}
+                onSelect={(_, info) => {
+                  // 이름 클릭 시 체크박스 토글
+                  const clickedKey = info.node.key;
+                  if (selectedOrgKeys.includes(clickedKey)) {
+                    // 이미 체크되어 있으면 체크 해제
+                    setSelectedOrgKeys(selectedOrgKeys.filter(key => key !== clickedKey));
+                  } else {
+                    // 체크되어 있지 않으면 체크 추가
+                    setSelectedOrgKeys([...selectedOrgKeys, clickedKey]);
+                  }
+                }}
                 treeData={orgTreeData}
                 titleRender={(node) => {
                   const key = node.key.toString();
@@ -601,6 +612,17 @@ const MyListDetailView = ({ onClose }: MyListDetailViewProps) => {
                   setSelectedMyListKeys(keys);
                 } else {
                   setSelectedMyListKeys(keys.checked);
+                }
+              }}
+              onSelect={(_, info) => {
+                // 이름 클릭 시 체크박스 토글
+                const clickedKey = info.node.key;
+                if (selectedMyListKeys.includes(clickedKey)) {
+                  // 이미 체크되어 있으면 체크 해제
+                  setSelectedMyListKeys(selectedMyListKeys.filter(key => key !== clickedKey));
+                } else {
+                  // 체크되어 있지 않으면 체크 추가
+                  setSelectedMyListKeys([...selectedMyListKeys, clickedKey]);
                 }
               }}
               treeData={myListTreeData}
