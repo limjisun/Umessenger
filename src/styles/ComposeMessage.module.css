@@ -75,7 +75,9 @@
   font-size: 13px;
   color: #444;
 }
-
+.input::placeholder{
+  color: #bfbfbf;
+}
 /* 검색 입력 래퍼 */
 .searchInputWrapper {
   flex: 1;

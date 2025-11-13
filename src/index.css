@@ -171,3 +171,71 @@ table {
   background-color: transparent !important;
   border: none !important;
 }
+
+
+.ant-picker-outlined.ant-picker{
+  border-radius: 4px;
+  padding: 3px 11px;
+  border-color: #e3e3e3;
+}
+.ant-picker-outlined:focus-within{
+  box-shadow: none;
+
+}
+.ant-picker .ant-picker-input >input{
+  font-size: 13px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+.ant-picker .ant-picker-input >input::placeholder{
+  color: #bfbfbf;
+}
+.ant-picker-range .ant-picker-active-bar{
+  background: #222;
+}
+
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner, 
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled) .ant-picker-cell-inner, 
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled) .ant-picker-cell-inner{
+  background:#222;
+  color: #fff;
+}
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before{
+ border-color: transparent;
+}
+.ant-picker-dropdown .ant-picker-cell .ant-picker-cell-inner{
+  border-radius: 50%;
+}
+.ant-picker-dropdown .ant-picker-time-panel-column >li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner{
+  background: #FFFAEE;
+}
+:where(.css-dev-only-do-not-override-11mmrso).ant-btn-sm {
+    font-size: 14px;
+    height: 24px;
+    padding: 0px 7px;
+    border-radius: 4px;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range:not(.ant-picker-cell-disabled):before,
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled):before, 
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled):before{
+  background: #FFFAEE;
+}
+.ant-btn-variant-solid{
+  border: 1px solid #C1C1C1;
+  background: #fff;
+  color: #444;
+  border-radius: 3px;
+}
+.ant-btn-sm{
+  font-size: 13px;
+}
+.ant-btn-color-primary{
+  box-shadow: none;
+}
+.ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover{
+  background: transparent;
+  color: #444;
+}
