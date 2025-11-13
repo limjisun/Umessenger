@@ -8,6 +8,12 @@ export interface OrgUser {
   isOnline?: boolean; // 온라인 상태 추가
 }
 
+export interface OrgGroup {
+  id: string;
+  name: string;
+  userIds: string[]; // 그룹에 속한 사용자 ID들
+}
+
 export interface OrgUserWithPath extends OrgUser {
   path: string[]; // 조직 경로 (예: ['서울센터', 'A 테넌트', '경영지원 그룹', '인사팀'])
 }

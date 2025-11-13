@@ -5,14 +5,14 @@ import { Tabs, Button } from './common';
 import type { TabItem } from './common';
 import common from '@/styles/Common.module.css';
 import styles from '../styles/OrganizationPicker.module.css';
-import { useOrganizationStore, type OrgUser, type OrgTreeNode } from '../store/organizationStore';
+import { useOrganizationStore, type OrgUser, type OrgTreeNode, type OrgGroup } from '../store/organizationStore';
 import searchIcon from '../assets/images/icon-search.png';
 import arrowDown from '../assets/images/tree_on.png';
 import arrowRight from '../assets/images/tree_off.png';
 
 interface OrganizationPickerProps {
   onClose: () => void;
-  onSelect: (users: OrgUser[]) => void;
+  onSelect: (users: OrgUser[], groups?: OrgGroup[]) => void;
   multiple?: boolean;
 }
 
@@ -70,34 +70,76 @@ const OrganizationPicker = ({ onClose, onSelect, multiple = true }: Organization
   const myLists = useOrganizationStore((state) => state.myLists);
   const [activeTab, setActiveTab] = useState<string>('org');
   const [selectedUsers, setSelectedUsers] = useState<OrgUser[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<OrgGroup[]>([]); // 선택된 그룹 추적
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // 트리 데이터 생성 및 사용자 맵 구성
   const userMap = new Map<string, OrgUser>();
+  const groupMap = new Map<string, OrgTreeNode>(); // 그룹(팀/부서) 정보 저장
   const rootNode = convertToTreeData(orgTree, userMap, searchQuery);
   const treeData = rootNode ? [rootNode] : [];
+
+  // groupMap 구성 - 조직도 트리 순회하며 그룹 정보 저장
+  const buildGroupMap = (node: OrgTreeNode) => {
+    if (node.users && node.users.length > 0) {
+      groupMap.set(node.id, node);
+    }
+    if (node.children) {
+      node.children.forEach(child => buildGroupMap(child));
+    }
+  };
+  buildGroupMap(orgTree);
 
   const handleCheck = (checkedKeysValue: React.Key[] | { checked: React.Key[]; halfChecked: React.Key[] }) => {
     const keys = Array.isArray(checkedKeysValue) ? checkedKeysValue : checkedKeysValue.checked;
     setCheckedKeys(keys);
 
-    // 체크된 키에서 사용자만 필터링
+    // 체크된 키에서 사용자와 그룹 필터링
     const users: OrgUser[] = [];
+    const groups: OrgGroup[] = [];
+    const addedUserIds = new Set<string>(); // 중복 방지
+
     keys.forEach((key) => {
       const keyStr = String(key);
+
+      // 개별 사용자 선택
       if (keyStr.startsWith('user-')) {
         const user = userMap.get(keyStr);
-        if (user) {
+        if (user && !addedUserIds.has(user.id)) {
           users.push(user);
+          addedUserIds.add(user.id);
+        }
+      }
+      // 그룹(팀/부서) 선택
+      else {
+        const groupNode = groupMap.get(keyStr);
+        if (groupNode && groupNode.users && groupNode.users.length > 0) {
+          // 그룹의 모든 사용자를 추가
+          const groupUserIds = groupNode.users.map(u => u.id);
+          groupNode.users.forEach(user => {
+            if (!addedUserIds.has(user.id)) {
+              users.push(user);
+              addedUserIds.add(user.id);
+            }
+          });
+
+          // 그룹 정보 저장
+          groups.push({
+            id: groupNode.id,
+            name: groupNode.name,
+            userIds: groupUserIds,
+          });
         }
       }
     });
+
     setSelectedUsers(users);
+    setSelectedGroups(groups);
   };
 
   const handleConfirm = () => {
-    onSelect(selectedUsers);
+    onSelect(selectedUsers, selectedGroups);
     onClose();
   };
 
@@ -106,6 +148,19 @@ const OrganizationPicker = ({ onClose, onSelect, multiple = true }: Organization
     const newKeys = checkedKeys.filter(key => key !== userKey);
     setCheckedKeys(newKeys);
     setSelectedUsers(selectedUsers.filter(u => u.id !== userId));
+  };
+
+  const removeSelectedGroup = (groupId: string) => {
+    const newKeys = checkedKeys.filter(key => key !== groupId);
+    setCheckedKeys(newKeys);
+
+    // 해당 그룹에 속한 사용자들 제거
+    const group = selectedGroups.find(g => g.id === groupId);
+    if (group) {
+      const filteredUsers = selectedUsers.filter(u => !group.userIds.includes(u.id));
+      setSelectedUsers(filteredUsers);
+      setSelectedGroups(selectedGroups.filter(g => g.id !== groupId));
+    }
   };
 
   // 마이리스트를 트리 형식으로 변환
@@ -224,17 +279,32 @@ const OrganizationPicker = ({ onClose, onSelect, multiple = true }: Organization
       
         <div className={styles.selectedSection}>
           <div className={styles.selectedList}>
-            {selectedUsers.map(user => (
-              <span key={user.id} className={styles.selectedUser}>
-                {user.name}
+            {/* 그룹 표시 */}
+            {selectedGroups.map(group => (
+              <span key={group.id} className={styles.selectedUser}>
+                {group.name}
                 <button
-                  onClick={() => removeSelectedUser(user.id)}
+                  onClick={() => removeSelectedGroup(group.id)}
                   className={styles.removeUser}
                 >
                   ✕
                 </button>
               </span>
             ))}
+            {/* 개별 사용자 표시 (그룹에 속하지 않은 사용자만) */}
+            {selectedUsers
+              .filter(user => !selectedGroups.some(group => group.userIds.includes(user.id)))
+              .map(user => (
+                <span key={user.id} className={styles.selectedUser} title={user.username}>
+                  {user.name}
+                  <button
+                    onClick={() => removeSelectedUser(user.id)}
+                    className={styles.removeUser}
+                  >
+                    ✕
+                  </button>
+                </span>
+              ))}
           </div>
         </div>
       </div>

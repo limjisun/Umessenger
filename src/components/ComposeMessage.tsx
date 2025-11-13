@@ -4,7 +4,7 @@ import TipTapEditor from './TipTapEditor';
 import Button from './common/Button';
 import common from '@/styles/Common.module.css';
 import styles from '../styles/ComposeMessage.module.css';
-import { useOrganizationStore } from '../store/organizationStore';
+import { useOrganizationStore, type OrgGroup } from '../store/organizationStore';
 import groupIcon from '../assets/images/icon-group.png';
 interface ComposeMessageProps {
   onCancel: () => void;
@@ -28,7 +28,9 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
   const searchUsers = useOrganizationStore((state) => state.searchUsers);
 
   const [recipients, setRecipients] = useState<User[]>([]);
+  const [recipientGroups, setRecipientGroups] = useState<OrgGroup[]>([]);
   const [cc, setCc] = useState<User[]>([]);
+  const [ccGroups, setCcGroups] = useState<OrgGroup[]>([]);
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
@@ -59,11 +61,18 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
     setAttachments(attachments.filter((_, i) => i !== index));
   };
 
-  const handleOrgPickerSelect = (users: Array<{ name: string; username: string }>) => {
+  const handleOrgPickerSelect = (users: Array<{ name: string; username: string }>, groups?: OrgGroup[]) => {
     if (pickerMode === 'recipients') {
-      setRecipients([...recipients, ...users]);
+      // 그룹에 속하지 않은 개별 사용자만 추가
+      const groupUserIds = new Set(groups?.flatMap(g => g.userIds) || []);
+      const individualUsers = users.filter(u => !groupUserIds.has((u as any).id));
+      setRecipients([...recipients, ...individualUsers]);
+      setRecipientGroups([...recipientGroups, ...(groups || [])]);
     } else {
-      setCc([...cc, ...users]);
+      const groupUserIds = new Set(groups?.flatMap(g => g.userIds) || []);
+      const individualUsers = users.filter(u => !groupUserIds.has((u as any).id));
+      setCc([...cc, ...individualUsers]);
+      setCcGroups([...ccGroups, ...(groups || [])]);
     }
     setShowOrgPicker(false);
   };
@@ -72,8 +81,16 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
     setRecipients(recipients.filter((_, i) => i !== index));
   };
 
+  const handleRemoveRecipientGroup = (index: number) => {
+    setRecipientGroups(recipientGroups.filter((_, i) => i !== index));
+  };
+
   const handleRemoveCC = (index: number) => {
     setCc(cc.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveCCGroup = (index: number) => {
+    setCcGroups(ccGroups.filter((_, i) => i !== index));
   };
 
   // 받는사람 검색
@@ -122,7 +139,7 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
 
   const handleSend = () => {
     // 유효성 검사
-    if (recipients.length === 0) {
+    if (recipients.length === 0 && recipientGroups.length === 0) {
       alert('받는 사람을 선택해주세요.');
       return;
     }
@@ -138,9 +155,43 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
       return;
     }
 
+    // 그룹에 속한 모든 사용자를 실제로 펼쳐서 전송
+    const getUserById = useOrganizationStore.getState().getUserById;
+
+    const allRecipientUsers: string[] = [];
+    const allCCUsers: string[] = [];
+
+    // 받는사람: 그룹의 모든 사용자 펼치기
+    recipientGroups.forEach(group => {
+      group.userIds.forEach(userId => {
+        const user = getUserById(userId);
+        if (user) {
+          allRecipientUsers.push(`${user.name} (${user.username})`);
+        }
+      });
+    });
+    // 개별 사용자 추가
+    recipients.forEach(u => {
+      allRecipientUsers.push(`${u.name} (${u.username})`);
+    });
+
+    // 참조: 그룹의 모든 사용자 펼치기
+    ccGroups.forEach(group => {
+      group.userIds.forEach(userId => {
+        const user = getUserById(userId);
+        if (user) {
+          allCCUsers.push(`${user.name} (${user.username})`);
+        }
+      });
+    });
+    // 개별 사용자 추가
+    cc.forEach(u => {
+      allCCUsers.push(`${u.name} (${u.username})`);
+    });
+
     const messageData: MessageData = {
-      recipients: recipients.map(u => `${u.name} (${u.username})`),
-      cc: cc.map(u => `${u.name} (${u.username})`),
+      recipients: allRecipientUsers,
+      cc: allCCUsers,
       subject,
       content,
       attachments,
@@ -164,8 +215,22 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
               <label className={styles.label}>받는사람</label>
               <div className={styles.searchInputWrapper}>
                 <div className={styles.chipInputContainer}>
+                  {/* 그룹 표시 */}
+                  {recipientGroups.map((group, index) => (
+                    <div key={`group-${index}`} className={styles.userChip}>
+                      <span>{group.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveRecipientGroup(index)}
+                        className={styles.chipRemoveButton}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  {/* 개별 사용자 표시 */}
                   {recipients.map((user, index) => (
-                    <div key={index} className={styles.userChip}>
+                    <div key={`user-${index}`} className={styles.userChip} title={user.username}>
                       <span>{user.name} ({user.username})</span>
                       <button
                         type="button"
@@ -219,8 +284,22 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
               <label className={styles.label}>참조</label>
               <div className={styles.searchInputWrapper}>
                 <div className={styles.chipInputContainer}>
+                  {/* 그룹 표시 */}
+                  {ccGroups.map((group, index) => (
+                    <div key={`group-${index}`} className={styles.userChip}>
+                      <span>{group.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveCCGroup(index)}
+                        className={styles.chipRemoveButton}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  {/* 개별 사용자 표시 */}
                   {cc.map((user, index) => (
-                    <div key={index} className={styles.userChip}>
+                    <div key={`user-${index}`} className={styles.userChip} title={user.username}>
                       <span>{user.name} ({user.username})</span>
                       <button
                         type="button"
