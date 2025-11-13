@@ -42,7 +42,7 @@ const Login = () => {
     window.open(
       `${baseUrl}messages`,
       'messenger',
-      'width=1000,height=500,left=100,top=100,resizable=yes,scrollbars=yes'
+      'width=900,height=630,left=100,top=100,resizable=yes,scrollbars=yes'
     );
   };
 

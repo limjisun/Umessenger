@@ -287,6 +287,34 @@
   margin: 0;
 }
 
+/* Table styles in message content */
+.contentSection table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1em 0;
+  overflow: hidden;
+}
+
+.contentSection table td,
+.contentSection table th {
+  min-width: 1em;
+  border: 1px solid #d9d9d9;
+  padding: 8px 12px;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.contentSection table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f5f5f5;
+}
+
+.contentSection table p {
+  margin: 0;
+}
+
 /* 우클릭 컨텍스트 메뉴 */
 .contextMenu {
   position: fixed;

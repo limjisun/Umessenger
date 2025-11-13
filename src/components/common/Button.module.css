@@ -42,11 +42,6 @@
 }
 
 
-.primary:active:not(:disabled) {
-  background-color: #096dd9;
-  border-color: #096dd9;
-}
-
 .secondary {
   background-color: white;
   color: #999;
@@ -54,10 +49,6 @@
 }
 
 
-.secondary:active:not(:disabled) {
-  border-color: #096dd9;
-  color: #096dd9;
-}
 
 .danger {
   background-color: var(--color-error);

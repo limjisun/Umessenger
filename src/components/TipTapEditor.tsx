@@ -6,6 +6,10 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import { Image } from '@tiptap/extension-image';
 import { Link } from '@tiptap/extension-link';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
 import { Extension } from '@tiptap/core';
 import { useEffect } from 'react';
 import styles from '../styles/TipTapEditor.module.css';
@@ -78,6 +82,12 @@ const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
           rel: 'noopener noreferrer',
         },
       }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -207,6 +217,81 @@ const TipTapEditor = ({ value, onChange }: TipTapEditorProps) => {
             className={styles.colorPicker}
             title="글자 색"
           />
+        </div>
+
+        {/* 표 */}
+        <div className={styles.toolGroup}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+            className={styles.toolButton}
+            title="표 삽입 (3x3)"
+          >
+            ⊞
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().addColumnBefore().run()}
+            disabled={!editor.can().addColumnBefore()}
+            className={styles.toolButton}
+            title="왼쪽에 열 추가"
+          >
+            ⊣
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().addColumnAfter().run()}
+            disabled={!editor.can().addColumnAfter()}
+            className={styles.toolButton}
+            title="오른쪽에 열 추가"
+          >
+            ⊢
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().deleteColumn().run()}
+            disabled={!editor.can().deleteColumn()}
+            className={styles.toolButton}
+            title="열 삭제"
+          >
+            ⊟
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().addRowBefore().run()}
+            disabled={!editor.can().addRowBefore()}
+            className={styles.toolButton}
+            title="위에 행 추가"
+          >
+            ⊤
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().addRowAfter().run()}
+            disabled={!editor.can().addRowAfter()}
+            className={styles.toolButton}
+            title="아래에 행 추가"
+          >
+            ⊥
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().deleteRow().run()}
+            disabled={!editor.can().deleteRow()}
+            className={styles.toolButton}
+            title="행 삭제"
+          >
+            ━
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().deleteTable().run()}
+            disabled={!editor.can().deleteTable()}
+            className={styles.toolButton}
+            title="표 삭제"
+          >
+            ✕
+          </button>
         </div>
       </div>
         

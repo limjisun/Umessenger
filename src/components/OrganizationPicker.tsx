@@ -223,9 +223,6 @@ const OrganizationPicker = ({ onClose, onSelect, multiple = true }: Organization
           </div>
       
         <div className={styles.selectedSection}>
-          <div className={styles.selectedLabel}>
-            선택된 사용자 ({selectedUsers.length}명)
-          </div>
           <div className={styles.selectedList}>
             {selectedUsers.map(user => (
               <span key={user.id} className={styles.selectedUser}>

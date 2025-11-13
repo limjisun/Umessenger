@@ -1,6 +1,4 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import { useAuthStore } from '../store/authStore';
 import { useNotificationStore } from '../store/notificationStore';
 import { useMessageStore } from '../store/messageStore';
