@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Button, Input, Form } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Checkbox } from '../components/common';
 import { useAuthStore } from '../store/authStore';
 import type { LoginCredentials } from '../types';
