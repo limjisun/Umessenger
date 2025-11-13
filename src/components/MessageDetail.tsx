@@ -2,17 +2,21 @@ import { useState } from 'react';
 import type { Message } from '../store/messageStore';
 import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
+import common from '@/styles/Common.module.css';
 import styles from '../styles/Messages.module.css';
 import composeIcon from '../assets/images/icon-compose.png';
+import ReadReceiptModal from './ReadReceiptModal';
 
 interface MessageDetailProps {
   message: Message;
+  onReply?: (message: Message) => void;
 }
 
-const MessageDetail = ({ message }: MessageDetailProps) => {
+const MessageDetail = ({ message, onReply }: MessageDetailProps) => {
   const [showAllRecipients, setShowAllRecipients] = useState(false);
   const [showAllCC, setShowAllCC] = useState(false);
   const [showAllAttachments, setShowAllAttachments] = useState(false);
+  const [showReadReceipt, setShowReadReceipt] = useState(false);
   // 파일 다운로드 처리
   const handleDownload = (file: { name: string; size: number }) => {
     // 실제 파일 다운로드 로직 (브라우저 다운로드)
@@ -68,7 +72,10 @@ const MessageDetail = ({ message }: MessageDetailProps) => {
               }
             </h3>
           </div>
-          <button className={styles.replyButton}> 
+          <button
+            className={styles.replyButton}
+            onClick={() => onReply?.(message)}
+          >
             <img
                 src={composeIcon}
                 alt="답장보내기"
@@ -136,6 +143,14 @@ const MessageDetail = ({ message }: MessageDetailProps) => {
                 </>
               )}
             </span>
+            {message.type === 'sent' && (
+              <button
+                className={common.actionButton}
+                onClick={() => setShowReadReceipt(true)}
+              >
+                수신확인
+              </button>
+            )}
           </div>
           {message.cc && message.cc.length > 0 && (
             <div className={styles.recipientRow}>
@@ -251,6 +266,14 @@ const MessageDetail = ({ message }: MessageDetailProps) => {
           <div dangerouslySetInnerHTML={{ __html: message.content }} />
         </div>
       </div>
+
+      {/* 수신확인 모달 */}
+      <ReadReceiptModal
+        isOpen={showReadReceipt}
+        onClose={() => setShowReadReceipt(false)}
+        recipients={message.recipientsReadStatus || []}
+        cc={message.ccReadStatus}
+      />
     </>
   );
 };

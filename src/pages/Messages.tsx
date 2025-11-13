@@ -29,6 +29,7 @@ const Messages = () => {
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [sortType, setSortType] = useState<'latest' | 'unread'>('latest'); // 정렬 타입
   const [isComposing, setIsComposing] = useState(false);
+  const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
   const [contextMenu, setContextMenu] = useState<{ visible: boolean; x: number; y: number; messageId: string | null }>({
     visible: false,
     x: 0,
@@ -300,8 +301,35 @@ const Messages = () => {
       <div className={common.listDetail}>
         {isComposing ? (
           <ComposeMessage
-            onCancel={() => setIsComposing(false)}
+            onCancel={() => {
+              setIsComposing(false);
+              setReplyToMessage(null);
+            }}
+            replyTo={replyToMessage ? {
+              sender: replyToMessage.sender,
+              subject: replyToMessage.subject,
+              content: replyToMessage.content
+            } : undefined}
             onSend={(data) => {
+              // 받는사람과 참조를 파싱해서 읽음 상태 생성
+              const parseRecipient = (recipientStr: string) => {
+                const match = recipientStr.match(/(.+)\s\((.+)\)/);
+                if (match) {
+                  return { name: match[1], username: match[2] };
+                }
+                return { name: recipientStr, username: '' };
+              };
+
+              const recipientsReadStatus = data.recipients.map(r => ({
+                ...parseRecipient(r),
+                readAt: undefined // 초기에는 모두 안읽음
+              }));
+
+              const ccReadStatus = data.cc.length > 0 ? data.cc.map(c => ({
+                ...parseRecipient(c),
+                readAt: undefined
+              })) : undefined;
+
               // 보낸 쪽지함에 메시지 추가
               addMessage({
                 sender: { name: '임지선', username: 'joy' }, // 현재 로그인 사용자 (실제로는 authStore에서 가져와야 함)
@@ -310,8 +338,10 @@ const Messages = () => {
                 isRead: true, // 보낸 쪽지는 읽음 상태
                 hasAttachment: data.attachments.length > 0,
                 isPinned: false,
-                recipients: data.recipients.map(name => ({ name, username: '' })), // 실제로는 조직도에서 선택한 정보 사용
-                cc: data.cc.length > 0 ? data.cc.map(name => ({ name, username: '' })) : undefined,
+                recipients: data.recipients.map(r => parseRecipient(r)),
+                cc: data.cc.length > 0 ? data.cc.map(c => parseRecipient(c)) : undefined,
+                recipientsReadStatus,
+                ccReadStatus,
                 attachments: data.attachments.length > 0 ? data.attachments.map(file => ({
                   name: file.name,
                   size: file.size,
@@ -325,11 +355,23 @@ const Messages = () => {
               alert('쪽지가 전송되었습니다.');
 
               setIsComposing(false);
+              setReplyToMessage(null);
               setActiveTab('sent'); // 보낸쪽지함으로 이동
             }}
           />
         ) : selectedMessage ? (
-          <MessageDetail message={selectedMessage} />
+          <MessageDetail
+            message={selectedMessage}
+            onReply={(message) => {
+              // 받은쪽지함에서만 답장 모드로, 보낸쪽지함에서는 일반 모드로
+              if (activeTab === 'received') {
+                setReplyToMessage(message);
+              } else {
+                setReplyToMessage(null);
+              }
+              setIsComposing(true);
+            }}
+          />
         ) : (
           <div className={styles.emptyState}>
             <p>쪽지를 선택해주세요</p>

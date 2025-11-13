@@ -6,6 +6,10 @@ export interface MessageUser {
   username: string;
 }
 
+export interface RecipientWithReadStatus extends MessageUser {
+  readAt?: string; // 읽은 시간 (undefined면 안읽음)
+}
+
 export interface MessageAttachment {
   name: string;
   size: number;
@@ -26,6 +30,8 @@ export interface Message {
   attachments?: MessageAttachment[];
   type: 'received' | 'sent'; // 받은쪽지인지 보낸쪽지인지
   isArchived: boolean; // 보관함 여부
+  recipientsReadStatus?: RecipientWithReadStatus[]; // 보낸 쪽지의 수신자별 읽음 상태
+  ccReadStatus?: RecipientWithReadStatus[]; // 보낸 쪽지의 참조자별 읽음 상태
 }
 
 interface MessageState {
@@ -107,6 +113,18 @@ export const useMessageStore = create<MessageState>()(
           recipients: [
             { name: '이승진', username: 'lee' },
             { name: '박민수', username: 'park123' }
+          ],
+          cc: [
+            { name: '홍길동', username: 'hong' },
+            { name: '김철수', username: 'kim' }
+          ],
+          recipientsReadStatus: [
+            { name: '이승진', username: 'lee', readAt: '2024-11-03T11:15:05' },
+            { name: '박민수', username: 'park123' } // 안읽음
+          ],
+          ccReadStatus: [
+            { name: '홍길동', username: 'hong' }, // 안읽음
+            { name: '김철수', username: 'kim', readAt: '2024-11-03T12:30:15' }
           ],
           type: 'sent',
           isArchived: false,

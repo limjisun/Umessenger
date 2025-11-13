@@ -211,12 +211,12 @@ const OrganizationPicker = ({ onClose, onSelect, multiple = true }: Organization
   const myListTreeData = convertMyListsToTree();
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={common.overlay} onClick={onClose}>
       <div className={styles.pickerContainer} onClick={(e) => e.stopPropagation()}>
         
-        <div className={styles.pickerHeader}>
+        <div className={common.modalheader}>
           <h3>사용자 검색</h3>
-          <button className={styles.closeButton} onClick={onClose}>✕</button>
+          <button className={common.modalcloseButton} onClick={onClose}>✕</button>
         </div>
 
        <div className={styles.tabwrap}>
@@ -308,7 +308,7 @@ const OrganizationPicker = ({ onClose, onSelect, multiple = true }: Organization
           </div>
         </div>
       </div>
-        <div className={styles.pickerFooter}>
+        <div className={common.modalFooter}>
           <Button variant="secondary" onClick={onClose}>
             취소
           </Button>

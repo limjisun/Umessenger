@@ -1,0 +1,67 @@
+
+.readContainer {
+  background: white;
+  width: 450px;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+.readbody {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.readbody h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.readtable {
+  width: 100%;
+  border-collapse: separate;
+   border-spacing: 0; 
+  font-size: 13px;
+  border-radius: 4px;
+  border: 1px solid #EBEBEB;
+}
+
+.readtable thead {
+  background-color: #F8F8F8;
+  border-radius: 4px 0 0 0;
+}
+
+.readtable th {
+  padding: 4px 12px;
+  text-align: left;
+  font-weight: 400;
+  color: #222;
+  border-bottom: 1px solid #EBEBEB;
+}
+
+.readtable th:first-child {
+  width: 60px;
+  text-align: center;
+}
+
+.readtable th:nth-child(2) {
+  width: 40%;
+}
+
+.readtable td {
+  padding: 4px 12px;
+  border-bottom: 1px solid #EBEBEB;
+  color: #444;
+}
+
+.readtable td:first-child {
+  text-align: center;
+}
+.readtable tbody tr:last-child td{
+  border-bottom: 0;
+}

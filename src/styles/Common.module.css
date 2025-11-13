@@ -132,3 +132,66 @@
   background-color: #e8e8e8;
   margin: 4px 0;
 }
+.actionButton {
+  padding: 3px 6px;
+  height: 22px;
+  border: 1px solid #02AFBF;
+  border-radius: 3px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 13px;
+  color: #02AFBF;
+  transition: all 0.2s;
+}
+
+.actionButton:hover {
+  background: #F5FBFB;
+}
+
+
+/*팝업*/
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 16px;
+  background: #55BDC7;
+  height: 26px;
+}
+
+.modalheader h3 {
+ margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.modalcloseButton {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* 푸터 */
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 20px;
+}

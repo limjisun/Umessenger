@@ -9,6 +9,11 @@ import groupIcon from '../assets/images/icon-group.png';
 interface ComposeMessageProps {
   onCancel: () => void;
   onSend: (data: MessageData) => void;
+  replyTo?: {
+    sender: { name: string; username: string } | Array<{ name: string; username: string }>;
+    subject: string;
+    content: string;
+  };
 }
 
 interface MessageData {
@@ -24,15 +29,36 @@ interface User {
   username: string;
 }
 
-const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
+const ComposeMessage = ({ onCancel, onSend, replyTo }: ComposeMessageProps) => {
   const searchUsers = useOrganizationStore((state) => state.searchUsers);
 
-  const [recipients, setRecipients] = useState<User[]>([]);
+  // 답장 모드인 경우 초기값 설정
+  const isReplyMode = !!replyTo;
+
+  const getInitialRecipients = (): User[] => {
+    if (!replyTo) return [];
+    const senders = Array.isArray(replyTo.sender) ? replyTo.sender : [replyTo.sender];
+    return senders.map(s => ({ name: s.name, username: s.username }));
+  };
+
+  const getInitialSubject = (): string => {
+    if (!replyTo) return '';
+    return replyTo.subject.startsWith('RE: ') ? replyTo.subject : `RE: ${replyTo.subject}`;
+  };
+
+  const getInitialContent = (): string => {
+    if (!replyTo) return '';
+    return `<br/><br/><div style="border-left: 3px solid #ccc; padding-left: 10px; color: #666;">
+      ${replyTo.content}
+    </div>`;
+  };
+
+  const [recipients, setRecipients] = useState<User[]>(getInitialRecipients());
   const [recipientGroups, setRecipientGroups] = useState<OrgGroup[]>([]);
   const [cc, setCc] = useState<User[]>([]);
   const [ccGroups, setCcGroups] = useState<OrgGroup[]>([]);
-  const [subject, setSubject] = useState('');
-  const [content, setContent] = useState('');
+  const [subject, setSubject] = useState(getInitialSubject());
+  const [content, setContent] = useState(getInitialContent());
   const [attachments, setAttachments] = useState<File[]>([]);
   const [showOrgPicker, setShowOrgPicker] = useState(false);
   const [pickerMode, setPickerMode] = useState<'recipients' | 'cc'>('recipients');
@@ -202,7 +228,7 @@ const ComposeMessage = ({ onCancel, onSend }: ComposeMessageProps) => {
   return (
     <div className={styles.composeContainer}>
       <div className={styles.composeHeader}>
-        <h2>쪽지 보내기</h2>
+        <h2>{isReplyMode ? '쪽지 답장하기' : '쪽지 보내기'}</h2>
         {/* <button className={styles.closeButton} onClick={onCancel}>
           ✕
         </button> */}
