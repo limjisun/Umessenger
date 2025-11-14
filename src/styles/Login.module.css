@@ -91,15 +91,19 @@
 }
 .loginContainer :global(.ant-input-outlined:hover) {
   border-color: transparent;
+  
 }
 
 .loginContainer :global(.ant-btn-variant-solid) {
   background: #16858F;
+  border: none;
+  color: #fff;
   border-radius: 4px;
   font-size: 13px;
 }
 .loginContainer :global(.ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover) {
   background: #16858F;
+    color: #fff;
 }
 
 /* 기억하기 체크박스 */

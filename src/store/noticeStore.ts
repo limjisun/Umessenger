@@ -34,6 +34,7 @@ export interface Notice {
 interface NoticeState {
   notices: Notice[];
   addNotice: (notice: Omit<Notice, 'id' | 'createdAt'>) => void;
+  updateNotice: (noticeId: string, notice: Omit<Notice, 'id' | 'createdAt'>) => void;
   markAsRead: (noticeId: string) => void;
   markAllAsRead: () => void;
   deleteNotice: (noticeId: string) => void;
@@ -41,7 +42,7 @@ interface NoticeState {
 
 export const useNoticeStore = create<NoticeState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       notices: [
         {
           id: 'n1',
@@ -154,6 +155,19 @@ export const useNoticeStore = create<NoticeState>()(
             },
             ...state.notices,
           ],
+        })),
+
+      updateNotice: (noticeId, notice) =>
+        set((state) => ({
+          notices: state.notices.map((n) =>
+            n.id === noticeId
+              ? {
+                  ...notice,
+                  id: noticeId,
+                  createdAt: n.createdAt,
+                }
+              : n
+          ),
         })),
 
       markAsRead: (noticeId) =>

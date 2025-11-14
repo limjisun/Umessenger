@@ -8,6 +8,7 @@ import OrganizationPicker from './OrganizationPicker';
 import TipTapEditor from './TipTapEditor';
 import Button from './common/Button';
 import Checkbox from './common/Checkbox';
+import NoticePreview from './NoticePreview';
 import common from '@/styles/Common.module.css';
 import styles from '../styles/ComposeMessage.module.css';
 import { useOrganizationStore, type OrgGroup } from '../store/organizationStore';
@@ -18,15 +19,25 @@ import checkOff from '../assets/images/check_off.png';
 interface ComposeNoticeProps {
   onCancel: () => void;
   onSubmit: (data: NoticeData) => void;
+  editingNotice?: {
+    id: string;
+    title: string;
+    content: string;
+    targets?: Array<{ id: string; name: string; username: string }>;
+    attachments?: Array<{ name: string; size: number; url: string }>;
+    period?: { startAt: string; endAt: string };
+  };
 }
 
 interface NoticeData {
+  id?: string;
   subject: string;
   content: string;
   targets: string[];
   attachments: File[];
   startDate?: string;
   endDate?: string;
+  status?: '임시저장' | '공지중' | '공지예정';
 }
 
 interface User {
@@ -34,21 +45,37 @@ interface User {
   username: string;
 }
 
-const ComposeNotice = ({ onCancel, onSubmit }: ComposeNoticeProps) => {
+const ComposeNotice = ({ onCancel, onSubmit, editingNotice }: ComposeNoticeProps) => {
   const searchUsers = useOrganizationStore((state) => state.searchUsers);
 
-  const [targets, setTargets] = useState<User[]>([]);
+  const [targets, setTargets] = useState<User[]>(() => {
+    if (editingNotice?.targets) {
+      return editingNotice.targets.map(t => ({ name: t.name, username: t.username }));
+    }
+    return [];
+  });
   const [targetGroups, setTargetGroups] = useState<OrgGroup[]>([]);
-  const [subject, setSubject] = useState('');
-  const [content, setContent] = useState('');
+  const [subject, setSubject] = useState(editingNotice?.title || '');
+  const [content, setContent] = useState(editingNotice?.content || '');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [showOrgPicker, setShowOrgPicker] = useState(false);
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [startDate, setStartDate] = useState<Dayjs | null>(() => {
+    if (editingNotice?.period?.startAt) {
+      return dayjs(editingNotice.period.startAt);
+    }
+    return null;
+  });
+  const [endDate, setEndDate] = useState<Dayjs | null>(() => {
+    if (editingNotice?.period?.endAt) {
+      return dayjs(editingNotice.period.endAt);
+    }
+    return null;
+  });
   const [isImmediate, setIsImmediate] = useState(false);
 
   const [targetInput, setTargetInput] = useState('');
   const [targetSuggestions, setTargetSuggestions] = useState<User[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
 
   // 글자 수 계산 (HTML 태그 제거)
   const getTextLength = (html: string) => {
@@ -108,22 +135,24 @@ const ComposeNotice = ({ onCancel, onSubmit }: ComposeNoticeProps) => {
     setTargetSuggestions([]);
   };
 
-  const handleSubmit = () => {
-    // 유효성 검사
-    if (targets.length === 0 && targetGroups.length === 0) {
-      alert('공지대상을 선택해주세요.');
-      return;
-    }
+  const handleSubmit = (isDraft = false) => {
+    // 임시저장이 아닐 때만 유효성 검사
+    if (!isDraft) {
+      if (targets.length === 0 && targetGroups.length === 0) {
+        alert('공지대상을 선택해주세요.');
+        return;
+      }
 
-    if (!subject.trim()) {
-      alert('제목을 입력해주세요.');
-      return;
-    }
+      if (!subject.trim()) {
+        alert('제목을 입력해주세요.');
+        return;
+      }
 
-    const textContent = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-    if (!textContent) {
-      alert('내용을 입력해주세요.');
-      return;
+      const textContent = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+      if (!textContent) {
+        alert('내용을 입력해주세요.');
+        return;
+      }
     }
 
     // 그룹에 속한 모든 사용자를 실제로 펼쳐서 전송
@@ -146,12 +175,14 @@ const ComposeNotice = ({ onCancel, onSubmit }: ComposeNoticeProps) => {
     });
 
     const noticeData: NoticeData = {
+      id: editingNotice?.id,
       subject,
       content,
       targets: allTargetUsers,
       attachments,
       startDate: isImmediate ? '즉시 등록' : startDate?.toISOString(),
       endDate: endDate?.toISOString(),
+      status: isDraft ? '임시저장' : undefined,
     };
     onSubmit(noticeData);
   };
@@ -159,7 +190,7 @@ const ComposeNotice = ({ onCancel, onSubmit }: ComposeNoticeProps) => {
   return (
     <div className={styles.composeContainer}>
       <div className={styles.composeHeader}>
-        <h2>공지사항 등록</h2>
+        <h2>{editingNotice ? '공지사항 수정' : '공지사항 등록'}</h2>
       </div>
 
       <div className={styles.composeBody}>
@@ -364,11 +395,17 @@ const ComposeNotice = ({ onCancel, onSubmit }: ComposeNoticeProps) => {
           /<span>{maxLength}</span>
         </div>
         <div className={`${common.flex} ${common.alignCenter} ${common.gap5}`}>
-          <Button variant="secondary" onClick={onCancel}>
+           <Button variant="secondary" onClick={onCancel}>
             취소
           </Button>
-          <Button variant="primary" onClick={handleSubmit} disabled={currentLength > maxLength}>
-            등록
+          <Button variant="secondary" onClick={() => handleSubmit(true)}>
+            임시저장
+          </Button>
+          <Button variant="secondary" onClick={() => setShowPreview(true)}>
+            미리보기
+          </Button>
+          <Button variant="primary" onClick={() => handleSubmit(false)} disabled={currentLength > maxLength}>
+            {editingNotice ? '수정' : '등록'}
           </Button>
         </div>
       </div>
@@ -378,6 +415,20 @@ const ComposeNotice = ({ onCancel, onSubmit }: ComposeNoticeProps) => {
           onClose={() => setShowOrgPicker(false)}
           onSelect={handleOrgPickerSelect}
           multiple={true}
+        />
+      )}
+
+      {showPreview && (
+        <NoticePreview
+          title={subject}
+          content={content}
+          author="관리자"
+          startDate={isImmediate ? '즉시 등록' : startDate?.toISOString()}
+          endDate={endDate?.toISOString()}
+          targets={targets}
+          targetGroups={targetGroups}
+          attachments={attachments}
+          onClose={() => setShowPreview(false)}
         />
       )}
     </div>

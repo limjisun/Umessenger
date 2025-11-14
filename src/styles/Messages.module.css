@@ -385,3 +385,22 @@
   color: #595959;
   margin-left: 8px;
 }
+
+
+.editBtnWrap{
+  display: flex;
+}
+/*모달*/
+.noticemodalContent{
+  width: 90%;
+  height: 80%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.noticepreviewWrap{
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 83px);
+}

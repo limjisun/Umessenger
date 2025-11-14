@@ -5,14 +5,16 @@ import type { MenuProps } from 'antd';
 import common from '@/styles/Common.module.css';
 import styles from '../styles/Messages.module.css';
 import noticeEditIcon from '../assets/images/icon_noticeEdit.png';
+import noticeDelIcon from '../assets/images/icon_noticedel.png';
 
 interface NoticeDetailProps {
   notice: Notice;
   isAdmin?: boolean;
   onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-const NoticeDetail = ({ notice, isAdmin, onEdit }: NoticeDetailProps) => {
+const NoticeDetail = ({ notice, isAdmin, onEdit, onDelete }: NoticeDetailProps) => {
   const [showAllTargets, setShowAllTargets] = useState(false);
   const [showAllAttachments, setShowAllAttachments] = useState(false);
 
@@ -53,7 +55,7 @@ const NoticeDetail = ({ notice, isAdmin, onEdit }: NoticeDetailProps) => {
       <div className={styles.detailHeader}>
         <div className={styles.subjectSection}>
           <h2>{notice.title}</h2>
-          <div className={`${common.flex} ${common.alignCenter} ${common.gap5}`}>
+          <div className={`${common.flex} ${common.alignCenter} ${common.gap18} ${common.flexshrink}`}>
             <p className={styles.receivedDate}>
               {new Date(notice.createdAt).toLocaleString('ko-KR', {
                 hour12: false,
@@ -65,16 +67,33 @@ const NoticeDetail = ({ notice, isAdmin, onEdit }: NoticeDetailProps) => {
                 second: '2-digit'
               })}
             </p>
-            {isAdmin && onEdit && (
-              <button
-                className={styles.replyButton}
-                onClick={onEdit}
-              >
-                <img
-                  src={noticeEditIcon}
-                  alt="공지사항수정"
-                />
-              </button>
+            {isAdmin && (onEdit || onDelete) && (
+              <div className={styles.editBtnWrap}>
+                {onEdit && (
+                  <button
+                    className={styles.replyButton}
+                    onClick={onEdit}
+                  >
+                    <img
+                      src={noticeEditIcon}
+                      alt="공지사항수정"
+                      title="수정"
+                    />
+                  </button>
+                )}
+                {onDelete && (
+                  <button
+                    className={styles.replyButton}
+                    onClick={onDelete}
+                  >
+                    <img
+                      src={noticeDelIcon}
+                      alt="공지사항삭제"
+                      title="삭제"
+                    />
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>

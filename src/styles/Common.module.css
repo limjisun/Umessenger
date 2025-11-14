@@ -5,8 +5,15 @@
    align-items: center;
 }
 
+.flexshrink{
+  flex-shrink: 0;
+}
+
 .gap5{
     gap:5px;
+}
+.gap18{
+    gap:18px;
 }
 
 .containerWrap{
@@ -37,6 +44,7 @@
   justify-content: space-between;
   align-items: center;
   line-height: 20px;
+  height: 20px;
 }
 
 .listItems {
@@ -171,7 +179,7 @@
   align-items: center;
   padding: 0px 16px;
   background: #55BDC7;
-  height: 26px;
+  min-height: 26px;
 }
 
 .modalheader h3 {

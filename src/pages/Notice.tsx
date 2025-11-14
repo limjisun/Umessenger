@@ -48,16 +48,11 @@ const Notice = () => {
   const [filterStatus, setFilterStatus] = useState<'전체' | '공지중' | '임시저장' | '공지예정' | '공지종료'>('전체');
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const [isComposing, setIsComposing] = useState(false);
+  const [editingNotice, setEditingNotice] = useState<NoticeType | null>(null);
 
   // const useMock = import.meta.env.VITE_USE_MOCK === 'true';
   // mock 데이터
   const useMock =  (import.meta.env.VITE_USE_MOCK ?? 'true') === 'true';
-
-  console.log('[공지 디버깅] user:', user);
-  console.log('[공지 디버깅] isAdmin:', isAdmin);
-  console.log('[공지 디버깅] useMock:', useMock);
-  console.log('[공지 디버깅] storeNotices 개수:', storeNotices.length);
-  console.log('[공지 디버깅] storeNotices:', storeNotices);
 
   const { data } = useQuery({
     queryKey: ['notices'],
@@ -90,18 +85,13 @@ const Notice = () => {
     const q = searchQuery.trim().toLowerCase();
     let filtered = rawNotices;
 
-    console.log('[공지 디버깅] rawNotices:', rawNotices);
-    console.log('[공지 디버깅] filterStatus:', filterStatus);
-
     // 일반 유저는 공지중만
     if (!isAdmin) {
       filtered = filtered.filter((n) => (n as any).status === '공지중');
-      console.log('[공지 디버깅] 일반 유저 필터링 후:', filtered);
     } else {
       if (filterStatus !== '전체') {
         filtered = filtered.filter((n) => (n as any).status === filterStatus);
       }
-      console.log('[공지 디버깅] 관리자 필터링 후:', filtered);
     }
 
     // 검색
@@ -114,13 +104,10 @@ const Notice = () => {
     }
 
     // 최신순
-    const sorted = filtered.sort(
+    return filtered.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
-
-    console.log('[공지 디버깅] 최종 notices:', sorted);
-    return sorted;
   }, [rawNotices, searchQuery, filterStatus, isAdmin]);
 
   /**
@@ -148,16 +135,78 @@ const Notice = () => {
   };
 
   /**
-   * 공지사항 등록 핸들러
+   * 공지사항 등록/수정 핸들러
    */
   const handleNoticeSubmit = (data: any) => {
-    console.log('[공지사항 등록]', data);
-    // TODO: API 호출
+    const isEdit = !!data.id;
+    console.log(isEdit ? '[공지사항 수정]' : '[공지사항 등록]', data);
+
+    const addNotice = useNoticeStore.getState().addNotice;
+    const updateNotice = useNoticeStore.getState().updateNotice;
+
+    // 공지 데이터 생성
+    const noticeData = {
+      title: data.subject,
+      content: data.content,
+      author: user?.name || '관리자',
+      isImportant: false,
+      period: data.startDate && data.endDate ? {
+        startAt: data.startDate,
+        endAt: data.endDate,
+      } : undefined,
+      targets: data.targets?.map((t: string, idx: number) => ({
+        id: `t${Date.now()}_${idx}`,
+        name: t.split(' (')[0],
+        username: t.match(/\(([^)]+)\)/)?.[1] || '',
+      })),
+      attachments: data.attachments?.map((file: File) => ({
+        name: file.name,
+        size: file.size,
+        url: URL.createObjectURL(file),
+      })),
+      status: data.status || '공지중',
+    };
+
+    if (isEdit) {
+      updateNotice(data.id, noticeData);
+      alert('수정되었습니다.');
+    } else {
+      addNotice(noticeData);
+      if (data.status === '임시저장') {
+        alert('임시저장되었습니다.');
+      }
+    }
+
     setIsComposing(false);
+    setEditingNotice(null);
   };
 
   const handleNoticeCancel = () => {
     setIsComposing(false);
+    setEditingNotice(null);
+  };
+
+  /**
+   * 공지사항 수정 핸들러
+   */
+  const handleNoticeEdit = (notice: NoticeType) => {
+    setEditingNotice(notice);
+    setIsComposing(true);
+    setSelectedNotice(null);
+    console.log('[공지사항 수정 시작]', notice.id);
+  };
+
+  /**
+   * 공지사항 삭제 핸들러
+   */
+  const handleNoticeDelete = (notice: NoticeType) => {
+    if (window.confirm('공지사항을 삭제하시겠습니까?')) {
+      const deleteNotice = useNoticeStore.getState().deleteNotice;
+      deleteNotice(notice.id);
+      setSelectedNotice(null);
+      alert('삭제되었습니다.');
+      console.log('[공지사항 삭제]', notice.id);
+    }
   };
 
   return (
@@ -272,12 +321,14 @@ const Notice = () => {
           <ComposeNotice
             onCancel={handleNoticeCancel}
             onSubmit={handleNoticeSubmit}
+            editingNotice={editingNotice || undefined}
           />
         ) : selectedNotice ? (
           <NoticeDetail
             notice={selectedNotice}
             isAdmin={isAdmin}
-            onEdit={() => console.log('[공지사항 수정]', selectedNotice.id)}
+            onEdit={() => handleNoticeEdit(selectedNotice)}
+            onDelete={() => handleNoticeDelete(selectedNotice)}
           />
         ) : (
           <div className={styles.noticeContainer}>
