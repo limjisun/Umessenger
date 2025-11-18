@@ -18,14 +18,14 @@
   transform: none;
 
   /* 크기 조정 */
-  width: 300px;
-  min-height: 200px;
+  width: 120px;
+  min-height: 130px;
 
   /* 스타일 */
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--color-border-light);
+  border-radius: 3px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+  border: 1px solid #333;
   z-index: 1000;
   overflow: hidden;
 }
@@ -46,32 +46,92 @@
 
 /* 팝업 내용 */
 .popupContent {
-  padding: 20px;
+  padding: 12px;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+.popwrap {
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  font-size: 13px;
 }
 
+.popwrap::after{
+  content: '';
+  width: 100%;
+  height: 1px;
+  background: #EBEBEB;
+  display: block;
+}
+.popupCon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.popupContainer :global(.ant-btn-color-dangerous.ant-btn-variant-solid) {
+  background: #55BEC8 !important;
+  height: 24px !important;
+  padding: 3px 10px !important;
+  border-radius: 3px !important;
+  box-shadow: none !important;
+  border:none;
+}
+.popupContainer :global(.ant-btn):hover {
+ color: #fff!important;
+}
+
+.popupContainer :global(.ant-btn) {
+  height: 24px !important;
+  padding: 3px 10px !important;
+  border-radius: 3px !important;
+  font-size: 13px !important;
+}
+
+.online::before{
+ content: '';
+ width: 6px;
+ height: 6px;
+ margin-right: 4px;
+ border-radius: 50%;
+ background: #55BEC8;
+ display: inline-block
+}
 /* 상태 섹션 */
 .statusSection {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-dark);
-}
-
-/* 셀렉트 박스 스타일 */
-.statusSelect {
-  width: 100%;
-}
-
-/* 셀렉트 옵션 내부 */
+/* 상태 옵션 */
 .statusOption {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: 1px solid var(--color-border-light);
+}
+
+.statusOption:hover {
+  background-color: #f5f5f5;
+}
+
+.statusOption.active {
+  background-color: #e6f7ff;
+  border-color: #1890ff;
 }
 
 .statusDot {

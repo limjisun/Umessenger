@@ -20,7 +20,6 @@ interface NoticePreviewProps {
 const NoticePreview = ({
   title,
   content,
-  author,
   startDate,
   endDate,
   targets,
